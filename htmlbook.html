@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML + CSS — навчальний посібник</title>
+
+  <style>
+    /* ====== LAYOUT ====== */
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    aside {
+      width: 260px;
+      background: #1f2937;
+      color: white;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    aside a {
+      color: #9ca3af;
+      text-decoration: none;
+      display: block;
+      margin: 6px 0;
+    }
+
+    aside a:hover {
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    section {
+      margin-bottom: 48px;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 4px 6px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .tag-name {
+      color: #2563eb;
+    }
+
+    /* ====== CSS PREVIEW ====== */
+    .preview-box {
+      border: 1px solid #d1d5db;
+      padding: 16px;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+<aside>
+  <h2>HTML</h2>
+  <a href="#html">html</a>
+  <a href="#head">head</a>
+  <a href="#body">body</a>
+  <a href="#title">title</a>
+  <a href="#div">div</a>
+  <a href="#p">p</a>
+  <a href="#a">a</a>
+  <a href="#img">img</a>
+  <a href="#ul">ul / ol</a>
+  <a href="#table">table</a>
+  <a href="#text">b / i</a>
+
+  <h2>CSS</h2>
+  <a href="#css">CSS + preview</a>
+
+  <h2>Інше</h2>
+  <a href="#github">GitHub Pages</a>
+  <a href="#ux">Ергономіка</a>
+</aside>
+
+<main>
+
+<!-- ===== TAG TEMPLATE ===== -->
+<section id="html">
+  <h2 class="tag-name">&lt;html&gt;</h2>
+  <p><b>Призначення:</b> кореневий елемент HTML-документа</p>
+  <p><b>Базові атрибути:</b> lang</p>
+  <p><b>Де розміщується:</b> весь документ</p>
+
+  <pre><code>&lt;html lang="uk"&gt;...&lt;/html&gt;</code></pre>
+</section>
+
+<section id="head">
+  <h2 class="tag-name">&lt;head&gt;</h2>
+  <p><b>Призначення:</b> метадані сторінки</p>
+  <p><b>Базові атрибути:</b> —</p>
+  <p><b>Де розміщується:</b> всередині html</p>
+
+  <pre><code>&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+&lt;/head&gt;</code></pre>
+</section>
+
+<section id="body">
+  <h2 class="tag-name">&lt;body&gt;</h2>
+  <p><b>Призначення:</b> видимий контент сторінки</p>
+  <p><b>Де розміщується:</b> після head</p>
+
+  <pre><code>&lt;body&gt;
+  Контент
+&lt;/body&gt;</code></pre>
+</section>
+
+<section id="div">
+  <h2 class="tag-name">&lt;div&gt;</h2>
+  <p><b>Призначення:</b> блочний контейнер</p>
+  <p><b>Атрибути:</b> class, id</p>
+  <p><b>Де:</b> body</p>
+
+  <pre><code>&lt;div class="box"&gt;Текст&lt;/div&gt;</code></pre>
+</section>
+
+<section id="p">
+  <h2 class="tag-name">&lt;p&gt;</h2>
+  <p><b>Призначення:</b> абзац тексту</p>
+
+  <pre><code>&lt;p&gt;Це абзац&lt;/p&gt;</code></pre>
+</section>
+
+<section id="a">
+  <h2 class="tag-name">&lt;a&gt;</h2>
+  <p><b>Призначення:</b> гіперпосилання</p>
+  <p><b>Атрибути:</b> href, target</p>
+
+  <pre><code>&lt;a href="https://example.com"&gt;Посилання&lt;/a&gt;</code></pre>
+</section>
+
+<section id="img">
+  <h2 class="tag-name">&lt;img&gt;</h2>
+  <p><b>Призначення:</b> зображення</p>
+  <p><b>Атрибути:</b> src, alt</p>
+
+  <pre><code>&lt;img src="image.jpg" alt="Опис"&gt;</code></pre>
+</section>
+
+<section id="ul">
+  <h2 class="tag-name">&lt;ul&gt; / &lt;ol&gt;</h2>
+  <pre><code>&lt;ul&gt;
+  &lt;li&gt;Елемент&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+</section>
+
+<section id="table">
+  <h2 class="tag-name">&lt;table&gt;</h2>
+  <pre><code>&lt;table&gt;
+  &lt;tr&gt;&lt;td&gt;A&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+</section>
+
+<section id="text">
+  <h2 class="tag-name">&lt;b&gt; / &lt;i&gt;</h2>
+  <pre><code>&lt;b&gt;Жирний&lt;/b&gt; &lt;i&gt;Курсив&lt;/i&gt;</code></pre>
+</section>
+
+<!-- ===== CSS SECTION ===== -->
+<section id="css">
+  <h2>CSS + попередній перегляд</h2>
+
+  <pre><code>.box {
+  background: lightblue;
+  padding: 16px;
+}</code></pre>
+
+  <div class="preview-box box">
+    Це live-preview CSS
+  </div>
+</section>
+
+<!-- ===== GITHUB PAGES ===== -->
+<section id="github">
+  <h2>Розміщення сайту на GitHub Pages</h2>
+  <ol>
+    <li>Створи репозиторій</li>
+    <li>Додай <code>index.html</code></li>
+    <li>Settings → Pages → Branch: main</li>
+    <li>Адреса: <code>username.github.io/repo</code></li>
+  </ol>
+</section>
+
+<!-- ===== UX ===== -->
+<section id="ux">
+  <h2>Ергономіка та поради</h2>
+  <ul>
+    <li>Одна колонка для читання</li>
+    <li>Sidebar для навігації</li>
+    <li>Контрастний текст</li>
+    <li>Обмеження ширини (~70–80 символів)</li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>
