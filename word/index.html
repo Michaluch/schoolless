@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Практична робота (5 клас) — Форматування та зображення</title>
+  <style>
+    :root{
+      --bg:#f7f1fb;
+      --card:#ffffff;
+      --lilac-1:#ead9ff;
+      --lilac-2:#c7a7ff;
+      --lilac-3:#8e5bd7;
+      --text:#2b1b3a;
+      --muted:#5a3f73;
+      --ok:#2f8a57;
+      --warn:#c06a00;
+      --shadow: 0 10px 25px rgba(52, 18, 78, .12);
+      --radius: 18px;
+    }
+
+    /* Anti-copy */
+    *{
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, var(--lilac-1), transparent 60%),
+        radial-gradient(1000px 600px at 90% 30%, rgba(142,91,215,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg), #fff);
+      line-height:1.35;
+    }
+
+    header{
+      padding:22px 18px 10px;
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    .title{
+      background: linear-gradient(135deg, rgba(142,91,215,.16), rgba(199,167,255,.18));
+      border:1px solid rgba(142,91,215,.25);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:18px 18px;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size: clamp(20px, 2.8vw, 28px);
+      letter-spacing:.2px;
+      color: #2a0f43;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 14px;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .badge{
+      background: rgba(142,91,215,.12);
+      border:1px solid rgba(142,91,215,.25);
+      border-radius: 999px;
+      padding:6px 10px;
+    }
+
+    main{
+      max-width:980px;
+      margin:0 auto;
+      padding: 10px 18px 28px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+
+    @media (max-width: 860px){
+      main{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(142,91,215,.18);
+      padding: 16px 16px;
+    }
+
+    h2{
+      margin:0 0 10px;
+      font-size:18px;
+      color:#2a0f43;
+    }
+
+    h3{
+      margin:14px 0 8px;
+      font-size:16px;
+      color:#3a1658;
+    }
+
+    .list{
+      margin:0;
+      padding-left: 18px;
+      color: var(--text);
+      font-size:15px;
+    }
+    .list li{ margin:8px 0; }
+
+    .note{
+      background: rgba(234,217,255,.5);
+      border: 1px dashed rgba(142,91,215,.35);
+      border-radius: 14px;
+      padding: 12px 12px;
+      color: var(--muted);
+      font-size:14px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 520px){
+      .grid2{ grid-template-columns: 1fr; }
+    }
+
+    .task{
+      border:1px solid rgba(142,91,215,.22);
+      border-radius: 16px;
+      padding:12px 12px;
+      background: linear-gradient(180deg, rgba(234,217,255,.35), rgba(255,255,255,.9));
+    }
+
+    .tag{
+      display:inline-block;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      margin:0 0 8px;
+      background: rgba(142,91,215,.14);
+      border:1px solid rgba(142,91,215,.25);
+      color:#3a1658;
+    }
+
+    .check{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(142,91,215,.18);
+      background: rgba(247,241,251,.65);
+      margin:10px 0 0;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--lilac-3);
+      margin-top:4px;
+      flex:0 0 auto;
+      box-shadow: 0 0 0 4px rgba(142,91,215,.14);
+    }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid rgba(142,91,215,.22);
+      font-size:14px;
+    }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(142,91,215,.15);
+      vertical-align:top;
+    }
+    th{
+      background: rgba(199,167,255,.18);
+      color:#2a0f43;
+      text-align:left;
+    }
+    tr:last-child td{ border-bottom:none; }
+
+    .points{
+      font-weight:700;
+      color:#2a0f43;
+      white-space:nowrap;
+    }
+
+    .footer{
+      margin-top:12px;
+      font-size:12px;
+      color: rgba(90,63,115,.9);
+    }
+
+    .warn{
+      color: var(--warn);
+      font-weight:700;
+    }
+
+    /* Obvious overlay watermark to discourage copying */
+    .watermark{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .06;
+      background-image:
+        repeating-linear-gradient( -25deg,
+          rgba(142,91,215,.9) 0,
+          rgba(142,91,215,.9) 2px,
+          transparent 2px,
+          transparent 22px
+        );
+      mix-blend-mode: multiply;
+    }
+
+    /* Print-friendly: allow selection on print view only */
+    @media print{
+      *{ user-select: text !important; }
+      .watermark{ display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="watermark" aria-hidden="true"></div>
+
+  <header>
+    <div class="title card" style="padding:18px">
+      <h1>Практична робота (5 клас): Форматування тексту, сторінки та зображення</h1>
+      <div class="meta">
+        <span class="badge"><strong>Тема:</strong> Форматування символів і абзаців. Сторінки документа та їх форматування. Вставляння зображень</span>
+        <span class="badge"><strong>Тривалість:</strong> 15–20 хв</span>
+        <span class="badge"><strong>Інструмент:</strong> MS Word або Google Docs</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Мета практичної діяльності</h2>
+      <ul class="list">
+        <li>Навчитися форматувати <strong>символи</strong> (шрифт, розмір, колір, накреслення).</li>
+        <li>Навчитися форматувати <strong>абзаци</strong> (вирівнювання, відступи, інтервали).</li>
+        <li>Налаштувати <strong>сторінку документа</strong> (орієнтація, поля).</li>
+        <li>Вставити <strong>графічне зображення</strong> та налаштувати обтікання текстом.</li>
+      </ul>
+
+      <h2 style="margin-top:16px;">Інструкційна картка (для всіх варіантів)</h2>
+      <ol class="list">
+        <li>Створи новий документ і збережи його як: <strong>Практична_Текст_ТвоєПрізвище</strong>.</li>
+        <li>Налаштуй сторінку: <strong>поля 2 см</strong> з усіх боків, орієнтація — <strong>книжкова</strong> (або як у варіанті).</li>
+        <li>Введи текст свого варіанту (або перепиши з дошки/екрана вчителя).</li>
+        <li>Виконай форматування <strong>символів</strong> і <strong>абзаців</strong> згідно з вимогами.</li>
+        <li>Встав зображення (фото/малюнок) і налаштуй: <strong>розмір</strong> + <strong>обтікання</strong>.</li>
+        <li>Перевір охайність: однакові шрифти, відступи, інтервали, немає “порожніх” рядків.</li>
+        <li>Збережи роботу та покажи вчителю.</li>
+      </ol>
+
+      <div class="note" style="margin-top:14px;">
+        <strong>Порада:</strong> Не роби відступи пробілами. Використовуй налаштування абзацу (відступ першого рядка, інтервали, вирівнювання).
+      </div>
+
+      <h2 style="margin-top:16px;">Обери 1 варіант</h2>
+
+      <div class="grid2">
+        <div class="task">
+          <div class="tag">Варіант A — “Міні-стаття”</div>
+          <h3>Текст для набору</h3>
+          <div class="note">
+            <strong>Заголовок:</strong> Мій улюблений домашній улюбленець<br/>
+            <strong>Текст (2 абзаци):</strong> Опиши тваринку (вигляд, характер, догляд). У другому абзаці — правила догляду (що робити щодня).
+          </div>
+
+          <h3>Вимоги до форматування</h3>
+          <ul class="list">
+            <li><strong>Заголовок</strong>: шрифт 20–24, напівжирний, колір бузковий/фіолетовий, вирівнювання по центру.</li>
+            <li><strong>1-й абзац</strong>: вирівнювання по ширині, відступ першого рядка 1 см, міжрядковий 1,15.</li>
+            <li><strong>2-й абзац</strong>: маркований список із 3–5 пунктів (правила догляду).</li>
+            <li>У тексті виділи <strong>3 ключові слова</strong> курсивом.</li>
+          </ul>
+
+          <h3>Зображення</h3>
+          <ul class="list">
+            <li>Встав фото/малюнок тваринки.</li>
+            <li>Розташуй справа або зліва, <strong>обтікання: “по контуру/квадрат”</strong>.</li>
+            <li>Ширина зображення приблизно 6–8 см.</li>
+          </ul>
+
+          <div class="check"><span class="dot"></span><div>Після виконання: документ має виглядати як маленька стаття з ілюстрацією.</div></div>
+        </div>
+
+        <div class="task">
+          <div class="tag">Варіант B — “Оголошення”</div>
+          <h3>Текст для набору</h3>
+          <div class="note">
+            Створи оголошення про шкільну подію (наприклад, “Ярмарок”, “День спорту”, “Виставка малюнків”).<br/>
+            Має бути: <strong>назва події</strong>, <strong>дата/час</strong>, <strong>місце</strong>, <strong>запрошення</strong>.
+          </div>
+
+          <h3>Формат сторінки</h3>
+          <ul class="list">
+            <li>Орієнтація: <strong>альбомна</strong>.</li>
+            <li>Поля: <strong>1,5–2 см</strong>.</li>
+          </ul>
+
+          <h3>Вимоги до форматування</h3>
+          <ul class="list">
+            <li>Назва події: 26–32, напівжирний, по центру.</li>
+            <li>Основний текст: 14–16, вирівнювання по центру або по ширині.</li>
+            <li>Виділи <strong>дату</strong> та <strong>місце</strong> кольором (бузковий/фіолетовий).</li>
+            <li>Зроби рамку абзацу або фон абзацу світло-бузковим (якщо вмієш).</li>
+          </ul>
+
+          <h3>Зображення</h3>
+          <ul class="list">
+            <li>Встав тематичну картинку (спорт/ярмарок/мистецтво).</li>
+            <li>Розташуй над текстом або внизу, <strong>обтікання: “зверху і знизу”</strong>.</li>
+          </ul>
+
+          <div class="check"><span class="dot"></span><div>Після виконання: має вийти яскраве оголошення, яке можна роздрукувати.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h2>Критерії оцінювання (макс. 11 балів)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Що перевіряється</th>
+            <th class="points">Бали</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Документ збережено з правильним іменем, охайне оформлення</td>
+            <td class="points">1</td>
+          </tr>
+          <tr>
+            <td>Форматування сторінки (поля/орієнтація) виконано за вимогами</td>
+            <td class="points">2</td>
+          </tr>
+          <tr>
+            <td>Форматування символів (розмір/накреслення/колір, виділення ключових слів)</td>
+            <td class="points">3</td>
+          </tr>
+          <tr>
+            <td>Форматування абзаців (вирівнювання, відступи, інтервали, список)</td>
+            <td class="points">3</td>
+          </tr>
+          <tr>
+            <td>Вставлено зображення та правильно налаштовано розмір і обтікання</td>
+            <td class="points">2</td>
+          </tr>
+          <tr>
+            <td><strong>Разом</strong></td>
+            <td class="points"><strong>11</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note" style="margin-top:12px;">
+        <strong>Що здати:</strong> файл документа (.docx або посилання на Google Doc).<br/>
+        <span class="warn">Увага:</span> якщо вставлене зображення “ламає” текст — зміни обтікання.
+      </div>
+
+      <div class="footer">
+        Підказка клавіш (Word/Docs): <strong>Ctrl+B</strong> — напівжирний, <strong>Ctrl+I</strong> — курсив, <strong>Ctrl+U</strong> — підкреслення.
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // Anti-copy / anti-select helpers (best-effort; not absolute protection)
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    document.addEventListener('copy', (e) => {
+      e.preventDefault();
+      return false;
+    });
+
+    document.addEventListener('cut', (e) => {
+      e.preventDefault();
+      return false;
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const key = (e.key || '').toLowerCase();
+      const ctrl = e.ctrlKey || e.metaKey;
+
+      // Block common copy/select/print shortcuts
+      if (ctrl && (key === 'c' || key === 'x' || key === 'a' || key === 'p' || key === 's')) {
+        e.preventDefault();
+        return false;
+      }
+
+      // Block DevTools shortcuts (best-effort)
+      if (e.key === 'F12' || (ctrl && e.shiftKey && (key === 'i' || key === 'j' || key === 'c'))) {
+        e.preventDefault();
+        return false;
+      }
+    });
+  </script>
+</body>
+</html>
