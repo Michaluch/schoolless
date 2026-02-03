@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Проєкт: планування, відслідковування, інструменти та методології</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --card2:#0f1730;
+      --text:#e9edff;
+      --muted:#a9b2d6;
+      --accent:#6ae4ff;
+      --accent2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --maxw: 1100px;
+      --pad: 34px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:var(--sans);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(106,228,255,.15), transparent 60%),
+                  radial-gradient(900px 700px at 80% 70%, rgba(167,139,250,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      overflow:hidden;
+    }
+    .deck{
+      height:100vh; width:100vw;
+      display:flex; align-items:center; justify-content:center;
+      padding:22px;
+    }
+    .slide{
+      width:min(var(--maxw), 100%);
+      height:min(650px, calc(100vh - 90px));
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 22%), var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:var(--pad);
+      position:relative;
+      display:none;
+      transform: translateY(8px) scale(.995);
+      opacity:0;
+      transition: opacity .35s ease, transform .35s ease;
+      overflow:hidden;
+    }
+    .slide.active{
+      display:block;
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+    .topline{
+      display:flex; gap:14px; align-items:baseline; justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .kicker{
+      color:var(--muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+    h1{
+      margin:8px 0 6px 0;
+      font-size:40px;
+      line-height:1.12;
+    }
+    h2{
+      margin:6px 0 12px 0;
+      font-size:28px;
+    }
+    p{ margin: 10px 0; color:var(--muted); font-size:18px; line-height:1.5;}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      margin-top:16px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--card2);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:18px 18px;
+    }
+    .card h3{ margin:0 0 10px 0; font-size:18px;}
+    ul{ margin:10px 0 0 18px; color:var(--text); }
+    li{ margin:10px 0; font-size:18px; color:var(--text); }
+    li span.muted{ color:var(--muted); }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:14px;
+      white-space:nowrap;
+    }
+    .pill b{ color:var(--accent); }
+    .footer{
+      position:absolute; left:var(--pad); right:var(--pad); bottom:18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      color:var(--muted); font-size:13px;
+    }
+    .controls{
+      display:flex; gap:10px; align-items:center;
+    }
+    button{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    button:hover{ background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18); }
+    button:active{ transform: translateY(1px); }
+    .hint{
+      font-family:var(--mono);
+      color:rgba(233,237,255,.75);
+      background: rgba(255,255,255,.04);
+      border:1px dashed rgba(255,255,255,.14);
+      padding:10px 12px; border-radius:12px;
+      font-size:12px;
+    }
+
+    /* Progress */
+    .progressWrap{
+      position:fixed; left:0; right:0; bottom:0;
+      height:7px; background: rgba(255,255,255,.06);
+    }
+    .progress{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .25s ease;
+    }
+
+    /* Reveal bullets */
+    .reveal li{ opacity:.18; transform: translateY(3px); transition: opacity .25s ease, transform .25s ease; }
+    .reveal li.shown{ opacity:1; transform: translateY(0); }
+    .callout{
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      background: rgba(106,228,255,.08);
+      border-radius: 12px;
+      color: rgba(233,237,255,.9);
+      margin-top: 12px;
+      font-size: 18px;
+    }
+
+    /* Comparison table */
+    table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:14px; }
+    th, td{
+      padding:12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      font-size:15px;
+    }
+    th{
+      text-align:left;
+      color:rgba(233,237,255,.92);
+      background: rgba(255,255,255,.05);
+      position:sticky; top:0;
+    }
+    tr:last-child td{ border-bottom:none; }
+    td{ color:rgba(233,237,255,.86); }
+    .tag{ font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.12); }
+    .tag.low{ color:var(--bad); background: rgba(251,113,133,.10); }
+    .tag.mid{ color:var(--warn); background: rgba(251,191,36,.10); }
+    .tag.high{ color:var(--good); background: rgba(52,211,153,.10); }
+    .filters{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin: 10px 0 14px;
+    }
+
+    /* Mini Kanban */
+    .kanban{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:12px;
+      height: 380px;
+    }
+    .col{
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:12px;
+      display:flex; flex-direction:column; gap:10px;
+      overflow:auto;
+    }
+    .col h4{
+      margin:2px 0 2px;
+      font-size:14px;
+      color:rgba(233,237,255,.85);
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .task{
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:10px 10px;
+      cursor:grab;
+      user-select:none;
+    }
+    .task b{ color: var(--accent); }
+    .task small{ display:block; margin-top:6px; color:var(--muted); }
+    .drop{
+      outline: 2px dashed rgba(106,228,255,.35);
+      outline-offset: 4px;
+    }
+
+    /* Overview modal */
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.60);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 24px;
+    }
+    .overlay.active{ display:flex; }
+    .modal{
+      width:min(980px, 100%);
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:20px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .thumbs{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .thumb{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      padding: 14px;
+      cursor:pointer;
+      transition: transform .12s ease, background .2s ease;
+      min-height: 92px;
+    }
+    .thumb:hover{ transform: translateY(-2px); background: rgba(255,255,255,.06); }
+    .thumb .n{ font-family:var(--mono); color:rgba(233,237,255,.7); font-size:12px; }
+    .thumb .t{ margin-top:6px; font-size:15px; color:rgba(233,237,255,.92); font-weight:700; }
+    .thumb .d{ margin-top:4px; font-size:13px; color:var(--muted); }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+      h1{ font-size:34px; }
+      .kanban{ grid-template-columns: 1fr; height:auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+
+    <!-- Slide 1 -->
+    <section class="slide active" data-title="Старт" data-desc="Про що презентація і як нею керувати">
+      <div class="topline">
+        <div>
+          <div class="kicker">11 клас · проєктна діяльність</div>
+          <h1>Планування та відслідковування<br/>групового проєкту</h1>
+          <p>Інструменти, підходи, методології. Що таке методологія і як обрати підхід під ваш проєкт.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+          <div class="pill">Навігація: <b>← →</b> · Розкриття: <b>Space</b></div>
+          <div class="pill">Огляд слайдів: <b>O</b> · Допомога: <b>H</b></div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Що розберемо</h3>
+          <ul class="reveal">
+            <li class="shown">Поняття <b>методології</b> та різницю між метод/підхід/методологія</li>
+            <li>Навіщо потрібні <b>план</b> і <b>контроль прогресу</b></li>
+            <li>Інструменти: план, календар, чек-лист, канбан</li>
+            <li>Методології: каскадна, Agile, Scrum, Kanban</li>
+          </ul>
+          <div class="callout">Мета: працювати системно, не «в останню ніч».</div>
+        </div>
+        <div class="card">
+          <h3>Як працювати з «розкриттям»</h3>
+          <p>На багатьох слайдах пункти з’являються поступово.</p>
+          <div class="hint">Space — наступний пункт<br/>Shift+Space — попередній пункт</div>
+          <p style="margin-top:12px;">Далі — готові визначення та практичні шаблони мислення.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>© Навчальна презентація (HTML) · Можна зберегти як файл і запускати офлайн</div>
+        <div class="controls">
+          <button data-action="overview">Огляд (O)</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide" data-title="Методологія" data-desc="Визначення та відмінності">
+      <div class="topline">
+        <div>
+          <div class="kicker">поняття</div>
+          <h2>Що таке методологія?</h2>
+          <p><b>Методологія</b> — система принципів, правил і методів, яка описує <b>як організувати роботу</b>, у якій послідовності діяти та як контролювати результат.</p>
+        </div>
+        <div class="pill">Ключ: <b>система</b>, а не один метод</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Відмінність понять</h3>
+          <ul class="reveal">
+            <li class="shown"><b>Метод</b> — конкретний спосіб дії (напр., опитування, аналіз джерел)</li>
+            <li><b>Підхід</b> — загальний стиль організації/мислення (напр., командний, гнучкий)</li>
+            <li><b>Методологія</b> — поєднання підходів і методів у єдині правила роботи</li>
+          </ul>
+          <div class="callout">Просто: методологія — «як ми працюємо над роботою».</div>
+        </div>
+        <div class="card">
+          <h3>Міні-перевірка</h3>
+          <p>Спробуйте класифікувати:</p>
+          <ul>
+            <li><span class="muted">«Канбан-дошка»</span> → інструмент + метод (візуальний контроль)</li>
+            <li><span class="muted">«Agile»</span> → методологія (набір принципів)</li>
+            <li><span class="muted">«Звіт щоп’ятниці»</span> → метод контролю</li>
+          </ul>
+          <p style="margin-top:10px;">Далі: як планування «рятує» командні проєкти.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Space: розкриття пунктів · ← →: слайди</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide" data-title="Навіщо план" data-desc="Цілі планування і типові провали">
+      <div class="topline">
+        <div>
+          <div class="kicker">планування</div>
+          <h2>Навіщо потрібне планування проєкту?</h2>
+          <p>Планування зменшує ризики: хаос, затягування, «нерівномірне навантаження» і слабкий результат.</p>
+        </div>
+        <div class="pill">Ключ: <b>прозорість</b> + <b>контроль</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Що дає план</h3>
+          <ul class="reveal">
+            <li class="shown">Чітка <b>мета</b> і зрозумілий <b>продукт</b></li>
+            <li>Розподіл ролей і завдань: <b>хто</b> / <b>що</b> / <b>коли</b></li>
+            <li>Контроль дедлайнів і прогресу</li>
+            <li>Менше конфліктів: критерії стають видимими</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Що буває без плану</h3>
+          <ul class="reveal">
+            <li class="shown">Проєкт «пливе» і втрачає фокус</li>
+            <li>Робота відкладається до останнього моменту</li>
+            <li>Одна людина тягне більше за інших</li>
+            <li>Якість падає через поспіх</li>
+          </ul>
+          <div class="callout">Правило: якщо не видно плану — не видно проблеми.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Порада: план = мінімум 1 сторінка + дедлайни</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide" data-title="Етапи планування" data-desc="Що робимо від мети до оцінки">
+      <div class="topline">
+        <div>
+          <div class="kicker">процес</div>
+          <h2>Базові етапи планування групового проєкту</h2>
+          <p>Це універсальний «скелет», який працює майже для будь-якої теми.</p>
+        </div>
+        <div class="pill">Фокус: <b>мета → задачі → контроль</b></div>
+      </div>
+
+      <div class="card">
+        <ol class="reveal" style="margin:0 0 0 18px;">
+          <li class="shown">Визначити <b>мету</b> (що зміниться/що отримаємо)</li>
+          <li>Сформулювати <b>завдання</b> (конкретні кроки до мети)</li>
+          <li>Розподілити <b>ролі</b> і відповідальність</li>
+          <li>Спланувати <b>етапи роботи</b> (підготовка/дослідження/практика/підсумок)</li>
+          <li>Поставити <b>терміни</b> (дедлайни та проміжні точки)</li>
+          <li>Обрати <b>інструменти контролю</b> (канбан, звіти, чек-листи)</li>
+          <li>Визначити <b>критерії оцінювання</b> (якість, повнота, презентація)</li>
+        </ol>
+        <div class="callout">Ідея: контроль має бути не лише в кінці, а протягом процесу.</div>
+      </div>
+
+      <div class="footer">
+        <div>Space: крок за кроком</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide" data-title="Інструменти" data-desc="План, календар, чек-лист, канбан">
+      <div class="topline">
+        <div>
+          <div class="kicker">інструменти</div>
+          <h2>Чим планують і керують у команді?</h2>
+          <p>Інструмент — це «форма», яка робить роботу видимою та керованою.</p>
+        </div>
+        <div class="pill">Мінімум: <b>план + дедлайни + прогрес</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Ключові інструменти</h3>
+          <ul class="reveal">
+            <li class="shown"><b>План проєкту</b> — мета, задачі, етапи, відповідальні, результат</li>
+            <li><b>Календарний план</b> — дедлайни і розклад у часі</li>
+            <li><b>Чек-лист</b> — список конкретних дій, які «закриваються»</li>
+            <li><b>Канбан-дошка</b> — візуальний контроль: «Заплановано / У роботі / Виконано»</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Швидкий шаблон (що має бути в плані)</h3>
+          <ul>
+            <li><span class="muted">Назва</span> + <span class="muted">Мета</span></li>
+            <li><span class="muted">Завдання (5–10)</span></li>
+            <li><span class="muted">Етапи</span> + <span class="muted">терміни</span></li>
+            <li><span class="muted">Ролі</span> (координатор/дослідник/аналітик/доповідач)</li>
+            <li><span class="muted">Очікуваний результат</span> (продукт/презентація/звіт)</li>
+          </ul>
+          <div class="callout">Порада: кожне завдання має мати “Done” — зрозумілий критерій завершення.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: як відслідковувати прогрес без «мікроменеджменту»</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide" data-title="Контроль прогресу" data-desc="Зустрічі, проміжні результати, звіти">
+      <div class="topline">
+        <div>
+          <div class="kicker">відслідковування</div>
+          <h2>Як контролюють проєкт у процесі</h2>
+          <p>Контроль — це не «покарання», а раннє виявлення проблем і корекція плану.</p>
+        </div>
+        <div class="pill">Ключ: <b>регулярність</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Три прості механізми</h3>
+          <ul class="reveal">
+            <li class="shown"><b>Регулярні обговорення</b> (5–10 хв): що зроблено / що далі / що заважає</li>
+            <li><b>Проміжні результати</b>: чернетки, макети, тестові версії, часткові висновки</li>
+            <li><b>Звіти</b>: коротко і по суті — прогрес, проблеми, план корекції</li>
+          </ul>
+          <div class="callout">Формула зустрічі: «факти → проблема → рішення → наступні кроки».</div>
+        </div>
+        <div class="card">
+          <h3>Мінімальна “пульс-метрика” команди</h3>
+          <p>Оцініть за 10-бальною шкалою (анонімно або відкрито):</p>
+          <ul>
+            <li><span class="muted">Зрозумілість цілі</span> (0–10)</li>
+            <li><span class="muted">Навантаження справедливе</span> (0–10)</li>
+            <li><span class="muted">Прогрес видно</span> (0–10)</li>
+          </ul>
+          <p style="margin-top:10px;">Якщо будь-що <b>&lt; 7</b> — змінюємо план/розподіл.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: підходи організації роботи в групі</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide" data-title="Підходи" data-desc="Ієрархічний, командний, гнучкий">
+      <div class="topline">
+        <div>
+          <div class="kicker">організація</div>
+          <h2>Підходи до групової роботи</h2>
+          <p>Підхід — це «як приймаємо рішення» і «як розподіляємо відповідальність».</p>
+        </div>
+        <div class="pill">Вибір = <b>контекст</b> проєкту</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Ієрархічний</h3>
+          <ul class="reveal">
+            <li class="shown">Є координатор/лідер, він(вона) тримає структуру</li>
+            <li><span class="muted">Плюси:</span> швидко ухвалюються рішення</li>
+            <li><span class="muted">Мінуси:</span> залежність від однієї особи</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Командний та гнучкий</h3>
+          <ul class="reveal">
+            <li class="shown"><b>Командний</b>: рішення спільні, відповідальність розподілена</li>
+            <li><b>Гнучкий</b>: ролі і план можуть змінюватися у процесі</li>
+            <li><span class="muted">Плюси:</span> залученість, адаптивність</li>
+            <li><span class="muted">Мінуси:</span> складніше узгоджувати рішення</li>
+          </ul>
+          <div class="callout">Практика: комбінуйте — лідер для темпу, команда для якості.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: методології (Waterfall, Agile, Scrum, Kanban)</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide" data-title="Методології" data-desc="Коротко про Waterfall, Agile, Scrum, Kanban">
+      <div class="topline">
+        <div>
+          <div class="kicker">методології</div>
+          <h2>Основні методології (адаптовано для школи)</h2>
+          <p>Різні методології — різні відповіді на питання: «чи можна змінювати план по ходу?»</p>
+        </div>
+        <div class="pill">Вісь: <b>план ↔ гнучкість</b></div>
+      </div>
+
+      <div class="card">
+        <ul class="reveal">
+          <li class="shown"><b>Каскадна (Waterfall)</b>: чіткі етапи → виконання → перевірка → презентація</li>
+          <li><b>Agile</b>: робота короткими частинами + постійне уточнення і зворотний зв’язок</li>
+          <li><b>Scrum</b> (різновид Agile): короткі цикли (спринти), регулярні зустрічі, ролі</li>
+          <li><b>Kanban</b>: візуальне керування потоком задач через дошку</li>
+        </ul>
+        <div class="callout">Вибір: якщо тема стабільна — Waterfall; якщо творчо/ІТ — Agile/Scrum; якщо потрібна наочність — Kanban.</div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: інтерактивне порівняння</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide" data-title="Порівняння" data-desc="Таблиця + фільтри (гнучкість/контроль)">
+      <div class="topline">
+        <div>
+          <div class="kicker">порівняння</div>
+          <h2>Порівняння методологій</h2>
+          <p>Натисніть фільтри, щоб підсвітити сценарії: потрібен чіткий план чи максимальна гнучкість.</p>
+        </div>
+        <div class="pill">Інтерактив: <b>фільтри</b> нижче</div>
+      </div>
+
+      <div class="filters">
+        <button data-filter="all">Показати все</button>
+        <button data-filter="stable">Стабільна тема / чіткі вимоги</button>
+        <button data-filter="creative">Творчо / ІТ / зміни по ходу</button>
+        <button data-filter="visual">Потрібна наочність прогресу</button>
+      </div>
+
+      <div class="card" style="padding:0; overflow:auto; max-height: 430px;">
+        <table id="methodTable">
+          <thead>
+            <tr>
+              <th>Методологія</th>
+              <th>План</th>
+              <th>Гнучкість</th>
+              <th>Контроль</th>
+              <th>Коли підходить</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-tags="stable">
+              <td><b>Каскадна</b></td>
+              <td>Чіткий</td>
+              <td><span class="tag low">Низька</span></td>
+              <td>Переважно наприкінці</td>
+              <td>Дослідження, реферати, «відомий результат»</td>
+            </tr>
+            <tr data-tags="creative">
+              <td><b>Agile</b></td>
+              <td>Орієнтовний</td>
+              <td><span class="tag high">Висока</span></td>
+              <td>Постійний</td>
+              <td>Коли ідея уточнюється в процесі</td>
+            </tr>
+            <tr data-tags="creative">
+              <td><b>Scrum</b></td>
+              <td>Циклічний</td>
+              <td><span class="tag high">Висока</span></td>
+              <td>Регулярний (спринти)</td>
+              <td>Командні проєкти з частими перевірками</td>
+            </tr>
+            <tr data-tags="visual creative">
+              <td><b>Kanban</b></td>
+              <td>Мінімальний</td>
+              <td><span class="tag high">Висока</span></td>
+              <td>Візуальний</td>
+              <td>Коли важливо «бачити» стан задач</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <div>Порада: для школи часто працює комбінація: план + Kanban-дошка.</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide" data-title="Kanban demo" data-desc="Міні-дошка: перетягни задачі">
+      <div class="topline">
+        <div>
+          <div class="kicker">демо</div>
+          <h2>Міні Kanban-дошка (спробуйте перетягнути задачі)</h2>
+          <p>Канбан робить прогрес видимим: що заплановано, що робимо зараз, що вже готово.</p>
+        </div>
+        <div class="pill">Drag & Drop: <b>мишкою</b></div>
+      </div>
+
+      <div class="kanban" id="kanban">
+        <div class="col" data-col="todo">
+          <h4>Заплановано</h4>
+          <div class="task" draggable="true"><b>Зібрати джерела</b><small>посилання/книги/статті</small></div>
+          <div class="task" draggable="true"><b>Скласти план</b><small>етапи + дедлайни</small></div>
+          <div class="task" draggable="true"><b>Розподілити ролі</b><small>хто за що відповідає</small></div>
+        </div>
+        <div class="col" data-col="doing">
+          <h4>У роботі</h4>
+          <div class="task" draggable="true"><b>Опрацювати матеріал</b><small>виділити ключові тези</small></div>
+        </div>
+        <div class="col" data-col="done">
+          <h4>Виконано</h4>
+          <div class="task" draggable="true"><b>Обрати тему</b><small>узгоджено командою</small></div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Порада: обмежуйте «У роботі» (WIP), щоб не розпорошуватись.</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Фініш →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11 -->
+    <section class="slide" data-title="Підсумок" data-desc="Ключові думки і короткий чек-лист">
+      <div class="topline">
+        <div>
+          <div class="kicker">підсумок</div>
+          <h2>Що варто запам’ятати</h2>
+          <p>Методологія — система правил роботи. План і контроль — запорука стабільного результату команди.</p>
+        </div>
+        <div class="pill">Готово до уроку: <b>конспект → презентація</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Короткий чек-лист команди</h3>
+          <ul class="reveal">
+            <li class="shown">Є <b>мета</b> і зрозумілий <b>результат</b> (продукт)</li>
+            <li>Є 5–10 задач з критеріями «Done»</li>
+            <li>Є ролі та відповідальні</li>
+            <li>Є дедлайни та проміжні точки</li>
+            <li>Є механізм контролю: Kanban/звіти/зустрічі</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Підбір методології</h3>
+          <ul>
+            <li><span class="tag low">Каскадна</span> — коли вимоги стабільні</li>
+            <li><span class="tag high">Agile/Scrum</span> — коли очікуються зміни</li>
+            <li><span class="tag high">Kanban</span> — коли потрібна наочність і ритм</li>
+          </ul>
+          <div class="callout">Найкраща практика для школи: <b>простий план + Kanban + короткі зустрічі</b>.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Натисніть O для швидкого переходу до будь-якого слайду</div>
+        <div class="controls">
+          <button data-action="overview">Огляд (O)</button>
+          <button data-action="prev">← Назад</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="progressWrap" aria-hidden="true"><div class="progress" id="progress"></div></div>
+
+  <!-- Overview overlay -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Огляд слайдів">
+    <div class="modal">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+        <div>
+          <div class="kicker">навігація</div>
+          <div style="font-size:18px; font-weight:800;">Огляд слайдів</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="hint">Esc — закрити</div>
+          <button data-action="closeOverview">Закрити</button>
+        </div>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+  </div>
+
+  <!-- Help overlay (simple) -->
+  <div class="overlay" id="help" role="dialog" aria-modal="true" aria-label="Допомога">
+    <div class="modal">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+        <div>
+          <div class="kicker">гарячі клавіші</div>
+          <div style="font-size:18px; font-weight:800;">Допомога</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="hint">Esc — закрити</div>
+          <button data-action="closeHelp">Закрити</button>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        <div class="card">
+          <h3>Слайди</h3>
+          <ul>
+            <li><span class="muted">→ / PageDown</span> — наступний</li>
+            <li><span class="muted">← / PageUp</span> — попередній</li>
+            <li><span class="muted">Home</span> — перший</li>
+            <li><span class="muted">End</span> — останній</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Розкриття пунктів</h3>
+          <ul>
+            <li><span class="muted">Space</span> — показати наступний пункт</li>
+            <li><span class="muted">Shift + Space</span> — повернути попередній</li>
+            <li><span class="muted">O</span> — огляд слайдів</li>
+            <li><span class="muted">H</span> — це вікно</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Порада: під час пояснення натискайте Space — це задає темп виступу.</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+      const overlay = document.getElementById('overlay');
+      const thumbs = document.getElementById('thumbs');
+      const help = document.getElementById('help');
+
+      let idx = 0;
+
+      // For each slide: track reveal state
+      const revealState = slides.map(s => {
+        const items = Array.from(s.querySelectorAll('.reveal li'));
+        // initial shown count = how many already have .shown
+        const shown = items.filter(li => li.classList.contains('shown')).length;
+        return { items, shownCount: shown };
+      });
+
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+      function setActive(newIdx){
+        idx = clamp(newIdx, 0, slides.length - 1);
+        slides.forEach((s,i)=> s.classList.toggle('active', i === idx));
+        // update progress
+        const pct = ((idx) / (slides.length - 1)) * 100;
+        progress.style.width = isFinite(pct) ? pct + '%' : '0%';
+        // reset scroll inside slide
+        const active = slides[idx];
+        active.scrollTop = 0;
+      }
+
+      function nextSlide(){ setActive(idx + 1); }
+      function prevSlide(){ setActive(idx - 1); }
+
+      function revealNext(){
+        const st = revealState[idx];
+        const items = st.items;
+        if (!items.length) return false;
+        if (st.shownCount >= items.length) return false;
+        items[st.shownCount].classList.add('shown');
+        st.shownCount += 1;
+        return true;
+      }
+
+      function revealPrev(){
+        const st = revealState[idx];
+        const items = st.items;
+        if (!items.length) return false;
+        if (st.shownCount <= 0) return false;
+        st.shownCount -= 1;
+        items[st.shownCount].classList.remove('shown');
+        return true;
+      }
+
+      // Overview
+      function openOverview(){
+        thumbs.innerHTML = '';
+        slides.forEach((s, i)=>{
+          const div = document.createElement('div');
+          div.className = 'thumb';
+          div.innerHTML = `
+            <div class="n">#${String(i+1).padStart(2,'0')}</div>
+            <div class="t">${s.dataset.title || ('Слайд ' + (i+1))}</div>
+            <div class="d">${s.dataset.desc || ''}</div>
+          `;
+          div.addEventListener('click', ()=>{
+            closeOverview();
+            setActive(i);
+          });
+          thumbs.appendChild(div);
+        });
+        overlay.classList.add('active');
+      }
+      function closeOverview(){ overlay.classList.remove('active'); }
+
+      function openHelp(){ help.classList.add('active'); }
+      function closeHelp(){ help.classList.remove('active'); }
+
+      // Button actions
+      document.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const a = btn.dataset.action;
+        if (a === 'next') nextSlide();
+        if (a === 'prev') prevSlide();
+        if (a === 'overview') openOverview();
+        if (a === 'closeOverview') closeOverview();
+        if (a === 'closeHelp') closeHelp();
+      });
+
+      // Keyboard
+      document.addEventListener('keydown', (e)=>{
+        const inOverlay = overlay.classList.contains('active') || help.classList.contains('active');
+        if (e.key === 'Escape'){
+          if (overlay.classList.contains('active')) closeOverview();
+          if (help.classList.contains('active')) closeHelp();
+          return;
+        }
+        if (inOverlay) return;
+
+        if (e.key === 'ArrowRight' || e.key === 'PageDown'){
+          nextSlide(); e.preventDefault();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp'){
+          prevSlide(); e.preventDefault();
+        } else if (e.key === 'Home'){
+          setActive(0); e.preventDefault();
+        } else if (e.key === 'End'){
+          setActive(slides.length-1); e.preventDefault();
+        } else if (e.key === ' '){
+          // Reveal first; if no more reveal, move next
+          const backward = e.shiftKey;
+          const ok = backward ? revealPrev() : revealNext();
+          if (!ok && !backward) nextSlide();
+          e.preventDefault();
+        } else if (e.key.toLowerCase() === 'o'){
+          openOverview(); e.preventDefault();
+        } else if (e.key.toLowerCase() === 'h'){
+          openHelp(); e.preventDefault();
+        }
+      });
+
+      // Table filters
+      const table = document.getElementById('methodTable');
+      if (table){
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+        document.querySelectorAll('button[data-filter]').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const f = btn.dataset.filter;
+            rows.forEach(r=>{
+              const tags = (r.dataset.tags || '').split(/\s+/).filter(Boolean);
+              const show = (f === 'all') || tags.includes(f);
+              r.style.display = show ? '' : 'none';
+            });
+          });
+        });
+      }
+
+      // Kanban drag & drop
+      const kanban = document.getElementById('kanban');
+      if (kanban){
+        let dragged = null;
+        kanban.addEventListener('dragstart', (e)=>{
+          const t = e.target.closest('.task');
+          if (!t) return;
+          dragged = t;
+          e.dataTransfer.effectAllowed = 'move';
+          setTimeout(()=> t.style.opacity = '.55', 0);
+        });
+        kanban.addEventListener('dragend', (e)=>{
+          if (dragged) dragged.style.opacity = '1';
+          dragged = null;
+          kanban.querySelectorAll('.col').forEach(c=> c.classList.remove('drop'));
+        });
+        kanban.addEventListener('dragover', (e)=>{
+          const col = e.target.closest('.col');
+          if (!col) return;
+          e.preventDefault();
+          kanban.querySelectorAll('.col').forEach(c=> c.classList.toggle('drop', c === col));
+        });
+        kanban.addEventListener('drop', (e)=>{
+          const col = e.target.closest('.col');
+          if (!col || !dragged) return;
+          e.preventDefault();
+          col.appendChild(dragged);
+          kanban.querySelectorAll('.col').forEach(c=> c.classList.remove('drop'));
+        });
+      }
+
+      // Click outside modal to close
+      overlay.addEventListener('click', (e)=>{ if (e.target === overlay) closeOverview(); });
+      help.addEventListener('click', (e)=>{ if (e.target === help) closeHelp(); });
+
+      // Init
+      setActive(0);
+
+      // Optional: open help on first load? (disabled)
+      // openHelp();
+    })();
+  </script>
+</body>
+</html>
