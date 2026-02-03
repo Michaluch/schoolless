@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Комплексне практичне завдання — Табличний процесор</title>
+  <style>
+    :root{
+      /* Pistachio theme */
+      --pistachio-50:#F3F8F1;
+      --pistachio-100:#E7F1E3;
+      --pistachio-200:#D1E6C8;
+      --pistachio-300:#B8D7A7;
+      --pistachio-400:#97C77C;
+      --pistachio-500:#78B95B; /* main */
+      --pistachio-600:#5EA043;
+      --pistachio-700:#4A7E34;
+      --pistachio-800:#365B26;
+      --pistachio-900:#223A17;
+
+      --ink:#0f172a;
+      --muted:#475569;
+      --border:rgba(34,58,23,.18);
+      --card:#ffffff;
+      --shadow:0 10px 30px rgba(15, 23, 42, .08);
+      --radius:16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, var(--pistachio-100) 0%, transparent 60%),
+        radial-gradient(1000px 600px at 90% 10%, var(--pistachio-200) 0%, transparent 55%),
+        linear-gradient(180deg, var(--pistachio-50), #fff 65%);
+    }
+
+    a{ color:var(--pistachio-800); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      gap: 22px;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header{
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--pistachio-600), var(--pistachio-400));
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 18px 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    header:before{
+      content:"";
+      position:absolute;
+      inset:-60px -120px auto auto;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%);
+      transform: rotate(10deg);
+    }
+    header h1{
+      margin:0 0 6px 0;
+      font-size: 20px;
+      letter-spacing:.2px;
+      position: relative;
+      z-index: 1;
+    }
+    header p{
+      margin:0;
+      opacity:.92;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+      max-width: 70ch;
+    }
+
+    nav{
+      position: sticky;
+      top: 16px;
+      align-self: start;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, .06);
+    }
+    nav .title{
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--pistachio-900);
+      letter-spacing: .2px;
+      margin-bottom: 10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    nav .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--pistachio-500);
+      box-shadow: 0 0 0 4px rgba(120,185,91,.18);
+    }
+    nav ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    nav a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      color: var(--ink);
+      font-size: 14px;
+    }
+    nav a:hover{
+      background: var(--pistachio-100);
+      border-color: rgba(120,185,91,.25);
+      text-decoration:none;
+    }
+    nav a small{
+      color: var(--muted);
+      display:block;
+      font-size: 12px;
+      margin-top:2px;
+    }
+
+    main{
+      display:flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    h2{
+      margin:0 0 10px 0;
+      font-size: 18px;
+      color: var(--pistachio-900);
+      letter-spacing: .2px;
+    }
+    h3{
+      margin: 14px 0 8px 0;
+      font-size: 15px;
+      color: var(--pistachio-800);
+    }
+    p, li{
+      color: var(--ink);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .meta{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .pill{
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--pistachio-100);
+      border: 1px solid rgba(120,185,91,.25);
+      color: var(--pistachio-900);
+    }
+
+    .requirements{
+      display:grid;
+      gap: 10px;
+    }
+    .requirements ul{
+      margin: 6px 0 0 18px;
+    }
+
+    .step{
+      border: 1px dashed rgba(74,126,52,.35);
+      background: linear-gradient(180deg, var(--pistachio-50), #fff);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+    .step strong{
+      color: var(--pistachio-900);
+    }
+    .example{
+      margin-top: 8px;
+      background: rgba(15, 23, 42, .04);
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 12px;
+      padding: 10px;
+      overflow:auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      color: #0b1220;
+      white-space: pre;
+    }
+
+    table{
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      margin-top: 8px;
+    }
+    th, td{
+      padding: 10px 10px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(34,58,23,.12);
+      border-right: 1px solid rgba(34,58,23,.08);
+      text-align: left;
+      vertical-align: top;
+    }
+    th{
+      background: var(--pistachio-100);
+      color: var(--pistachio-900);
+      font-weight: 700;
+    }
+    tr:last-child td{ border-bottom: 0; }
+    td:last-child, th:last-child{ border-right: 0; }
+
+    .variant-grid{
+      display:grid;
+      gap: 10px;
+    }
+    .note{
+      border-left: 4px solid var(--pistachio-600);
+      background: var(--pistachio-50);
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--pistachio-900);
+      font-size: 13px;
+    }
+
+    .footer{
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 10px 0 0 0;
+    }
+
+    @media (max-width: 920px){
+      .layout{ grid-template-columns: 1fr; }
+      nav{ position: relative; top: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <header>
+      <h1>Комплексне практичне завдання: Табличний процесор</h1>
+      <p>Теми: автозаповнення та автозавершення, копіювання формул, абсолютні й мішані посилання, функції табличного процесора. Навігація ліворуч: інструкційна карта, варіанти 1–5, критерії оцінювання.</p>
+      <div class="meta">
+        <span class="pill">НУШ: діяльнісний підхід</span>
+        <span class="pill">MS Excel / Google Sheets</span>
+        <span class="pill">Мінімум 30 рядків даних</span>
+        <span class="pill">5 варіантів</span>
+      </div>
+    </header>
+
+    <nav aria-label="Навігація">
+      <div class="title"><span class="dot"></span>Навігація</div>
+      <ul>
+        <li><a href="#instruction">Інструкційна карта<small>покроково з прикладами</small></a></li>
+        <li><a href="#v1">Варіант 1<small>Продаж товарів</small></a></li>
+        <li><a href="#v2">Варіант 2<small>Успішність учнів</small></a></li>
+        <li><a href="#v3">Варіант 3<small>Заробітна плата</small></a></li>
+        <li><a href="#v4">Варіант 4<small>Фінансові витрати</small></a></li>
+        <li><a href="#v5">Варіант 5<small>Температурні спостереження</small></a></li>
+        <li><a href="#grading">Критерії оцінювання<small>11 балів (НУШ)</small></a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="card" id="instruction">
+        <h2>Інструкційна карта (покрокове виконання з прикладами)</h2>
+        <p class="note">
+          Приклади нижче універсальні та не виконують жоден із варіантів 1–5 як готове рішення.
+        </p>
+
+        <div class="requirements">
+          <h3>Загальні вимоги</h3>
+          <ul>
+            <li>У твоїй таблиці має бути не менше <strong>30 рядків даних</strong>.</li>
+            <li>Формули вводь один раз у першому рядку з обчисленнями, далі копіюй вниз автозаповненням.</li>
+            <li>Обовʼязково використай <strong>відносні</strong>, <strong>абсолютні</strong> та <strong>мішані</strong> посилання.</li>
+            <li>Використай щонайменше <strong>3 функції</strong> табличного процесора для підсумків/аналізу.</li>
+            <li>Оформи таблицю (межі, вирівнювання, формат чисел).</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 1.</strong> Створи структуру таблиці (заголовки стовпців) за обраним варіантом.</p>
+          <p>Порада: заголовки роби жирним, зафіксуй верхній рядок (за потреби).</p>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 2.</strong> Заповни 2–3 перші рядки вручну, а потім використай автозаповнення.</p>
+          <p>Приклад для нумерації (введи <code>1</code> і <code>2</code>, виділи обидві клітинки та протягни вниз):</p>
+          <div class="example">1
+2
+3
+4
+...</div>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 3.</strong> Створи формулу з відносними посиланнями та скопіюй її вниз.</p>
+          <p>Приклад (обчислення добутку двох клітинок у рядку):</p>
+          <div class="example">=B2*C2</div>
+          <p>Після копіювання вниз посилання змінюються (B3*C3, B4*C4 тощо).</p>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 4.</strong> Винеси постійну величину в окрему клітинку та використай абсолютне посилання.</p>
+          <p>Приклад: у клітинці <code>E1</code> зберігається коефіцієнт. У формулі посилайся на нього як на абсолютну адресу:</p>
+          <div class="example">=B2*$E$1</div>
+          <p>Після копіювання вниз <code>$E$1</code> не змінюється.</p>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 5.</strong> Використай мішані посилання, якщо потрібно фіксувати лише рядок або лише стовпець.</p>
+          <p>Приклади:</p>
+          <div class="example">=$A2   (зафіксовано стовпець A)
+=A$1   (зафіксовано рядок 1)</div>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 6.</strong> Додай підсумки за допомогою функцій.</p>
+          <p>Приклади функцій (використай ті, які підходять до твого варіанту):</p>
+          <div class="example">=SUM(D2:D31)
+=COUNT(A2:A31)
+=AVERAGE(C2:C31)</div>
+          <p>Підсумкові формули розміщуй під таблицею або праворуч окремим блоком.</p>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 7.</strong> Перевір дані та оформи таблицю.</p>
+          <ul>
+            <li>Переглянь кілька рядків вручну: чи правильно рахує формула.</li>
+            <li>Задай формат чисел (гроші, відсотки, 1–2 знаки після коми).</li>
+            <li>Додай межі та вирівнювання.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card" id="v1">
+        <h2>Варіант 1. Продаж товарів</h2>
+        <div class="variant-grid">
+          <p><strong>Вимога:</strong> 30+ рядків (30 товарів).</p>
+          <table>
+            <thead>
+              <tr>
+                <th>№</th><th>Товар</th><th>Кількість</th><th>Ціна</th><th>Вартість</th><th>Знижка</th><th>До сплати</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="7">Створи та заповни таблицю за цією структурою.</td></tr>
+            </tbody>
+          </table>
+          <h3>Завдання</h3>
+          <ol>
+            <li>Заповни стовпці <strong>№</strong> і <strong>Товар</strong> з автозаповненням/автозавершенням.</li>
+            <li>Обчисли <strong>Вартість</strong> (кількість × ціна) та скопіюй формулу на всі рядки.</li>
+            <li>Винеси відсоток знижки в окрему клітинку і застосуй <strong>абсолютне посилання</strong> у формулі.</li>
+            <li>Обчисли <strong>До сплати</strong> з урахуванням знижки та скопіюй формулу вниз.</li>
+            <li>Додай блок підсумків (мінімум 3 функції): загальна сума до сплати, кількість товарів, середня ціна або інша доречна статистика.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="card" id="v2">
+        <h2>Варіант 2. Успішність учнів</h2>
+        <p><strong>Вимога:</strong> 30+ рядків (30 учнів).</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Учень</th><th>Предмет 1</th><th>Предмет 2</th><th>Предмет 3</th><th>Середній бал</th><th>Рівень</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="6">Створи та заповни таблицю за цією структурою.</td></tr>
+          </tbody>
+        </table>
+        <h3>Завдання</h3>
+        <ol>
+          <li>Заповни список учнів (можна автозавершенням).</li>
+          <li>Обчисли <strong>Середній бал</strong> для кожного учня та скопіюй формулу вниз.</li>
+          <li>Винеси <strong>прохідний бал</strong> в окрему клітинку та застосуй <strong>абсолютне посилання</strong> у формулі для визначення <strong>Рівня</strong>.</li>
+          <li>Використай <strong>мішані посилання</strong>, якщо робиш додаткові обчислення у вигляді таблиці праворуч.</li>
+          <li>Створи блок підсумків (мінімум 3 функції): кількість учнів, кількість учнів з рівнем вище порога, найвищий/найнижчий середній бал або інші доречні показники.</li>
+        </ol>
+      </section>
+
+      <section class="card" id="v3">
+        <h2>Варіант 3. Заробітна плата працівників</h2>
+        <p><strong>Вимога:</strong> 30+ рядків (30 працівників).</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Працівник</th><th>Посада</th><th>Відпрацьовано днів</th><th>Ставка</th><th>Оклад</th><th>Премія</th><th>Зарплата</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="7">Створи та заповни таблицю за цією структурою.</td></tr>
+          </tbody>
+        </table>
+        <h3>Завдання</h3>
+        <ol>
+          <li>Заповни перелік працівників автозаповненням (або шаблонними значеннями) до 30+ рядків.</li>
+          <li>Розрахуй <strong>Оклад</strong> та скопіюй формулу вниз.</li>
+          <li>Винеси відсоток(и) премії в окремі клітинки, використай <strong>абсолютні</strong> та <strong>мішані</strong> посилання в розрахунках.</li>
+          <li>Розрахуй <strong>Зарплату</strong> (оклад + премія) та скопіюй формулу.</li>
+          <li>Додай блок підсумків (мінімум 3 функції): загальна зарплата, середня зарплата, кількість працівників або інші доречні показники.</li>
+        </ol>
+      </section>
+
+      <section class="card" id="v4">
+        <h2>Варіант 4. Фінансові витрати</h2>
+        <p><strong>Вимога:</strong> 30+ рядків (30 днів / 30 операцій).</p>
+        <table>
+          <thead>
+            <tr>
+              <th>День</th><th>Категорія</th><th>Сума</th><th>Ліміт</th><th>Перевищення</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5">Створи та заповни таблицю за цією структурою.</td></tr>
+          </tbody>
+        </table>
+        <h3>Завдання</h3>
+        <ol>
+          <li>Заповни <strong>День</strong> автозаповненням до 30+ рядків.</li>
+          <li>Винеси <strong>Ліміт</strong> в окрему клітинку та застосуй <strong>абсолютне посилання</strong> у формулах.</li>
+          <li>Обчисли, чи є <strong>Перевищення</strong>, та скопіюй формулу вниз.</li>
+          <li>За потреби зроби додатковий блок праворуч (тут зручно застосувати <strong>мішані посилання</strong>).</li>
+          <li>Додай блок підсумків (мінімум 3 функції): загальна сума витрат, кількість перевищень, середні витрати або інші доречні показники.</li>
+        </ol>
+      </section>
+
+      <section class="card" id="v5">
+        <h2>Варіант 5. Температурні спостереження</h2>
+        <p><strong>Вимога:</strong> 30+ рядків (30 днів).</p>
+        <table>
+          <thead>
+            <tr>
+              <th>День</th><th>Температура</th><th>Відхилення</th><th>Оцінка</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4">Створи та заповни таблицю за цією структурою.</td></tr>
+          </tbody>
+        </table>
+        <h3>Завдання</h3>
+        <ol>
+          <li>Заповни <strong>День</strong> автозаповненням до 30+ рядків.</li>
+          <li>Винеси <strong>нормативну температуру</strong> в окрему клітинку та використай <strong>абсолютне посилання</strong>.</li>
+          <li>Обчисли <strong>Відхилення</strong> та скопіюй формулу на всі рядки.</li>
+          <li>Сформуй <strong>Оцінку</strong> (за власним правилом), використовуючи посилання та копіювання формул.</li>
+          <li>Додай блок підсумків (мінімум 3 функції): середня температура, кількість днів з відхиленням, найвища/найнижча температура або інші доречні показники.</li>
+        </ol>
+      </section>
+
+      <section class="card" id="grading">
+        <h2>Критерії оцінювання (НУШ, 11 балів)</h2>
+        <table>
+          <thead>
+            <tr><th>Критерій</th><th>Бали</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Коректна структура таблиці та коректність даних</td><td>2</td></tr>
+            <tr><td>Автозаповнення/автозавершення та копіювання формул</td><td>2</td></tr>
+            <tr><td>Застосування абсолютних і мішаних посилань</td><td>3</td></tr>
+            <tr><td>Використання функцій (не менше 3) для підсумків/аналізу</td><td>3</td></tr>
+            <tr><td>Оформлення та самостійність</td><td>1</td></tr>
+            <tr><th>Разом</th><th>11</th></tr>
+          </tbody>
+        </table>
+
+      </section>
+    </main>
+  </div>
+</body>
+</html>
