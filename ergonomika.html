@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ергономіка веб-сторінки · SEO та просування</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --card2:#0f1730;
+      --text:#e9edff;
+      --muted:#a9b2d6;
+      --accent:#6ae4ff;
+      --accent2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --maxw: 1100px;
+      --pad: 34px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:var(--sans);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(106,228,255,.15), transparent 60%),
+                  radial-gradient(900px 700px at 80% 70%, rgba(167,139,250,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      overflow:hidden;
+    }
+    .deck{
+      height:100vh; width:100vw;
+      display:flex; align-items:center; justify-content:center;
+      padding:22px;
+    }
+    .slide{
+      width:min(var(--maxw), 100%);
+      height:min(650px, calc(100vh - 90px));
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 22%), var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:var(--pad);
+      position:relative;
+      display:none;
+      transform: translateY(8px) scale(.995);
+      opacity:0;
+      transition: opacity .35s ease, transform .35s ease;
+      overflow:hidden;
+    }
+    .slide.active{
+      display:block;
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+    .topline{
+      display:flex; gap:14px; align-items:baseline; justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .kicker{
+      color:var(--muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+    h1{ margin:8px 0 6px 0; font-size:40px; line-height:1.12; }
+    h2{ margin:6px 0 12px 0; font-size:28px; }
+    p{ margin:10px 0; color:var(--muted); font-size:18px; line-height:1.5;}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      margin-top:16px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--card2);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:18px 18px;
+    }
+    .card h3{ margin:0 0 10px 0; font-size:18px;}
+    ul{ margin:10px 0 0 18px; color:var(--text); }
+    li{ margin:10px 0; font-size:18px; color:var(--text); }
+    li span.muted{ color:var(--muted); }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:14px;
+      white-space:nowrap;
+    }
+    .pill b{ color:var(--accent); }
+    .footer{
+      position:absolute; left:var(--pad); right:var(--pad); bottom:18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      color:var(--muted); font-size:13px;
+    }
+    .controls{ display:flex; gap:10px; align-items:center; }
+    button{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    button:hover{ background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18); }
+    button:active{ transform: translateY(1px); }
+    .hint{
+      font-family:var(--mono);
+      color:rgba(233,237,255,.75);
+      background: rgba(255,255,255,.04);
+      border:1px dashed rgba(255,255,255,.14);
+      padding:10px 12px; border-radius:12px;
+      font-size:12px;
+    }
+    .progressWrap{ position:fixed; left:0; right:0; bottom:0; height:7px; background: rgba(255,255,255,.06); }
+    .progress{ height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .25s ease; }
+    .reveal li{ opacity:.18; transform: translateY(3px); transition: opacity .25s ease, transform .25s ease; }
+    .reveal li.shown{ opacity:1; transform: translateY(0); }
+    .callout{
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      background: rgba(106,228,255,.08);
+      border-radius: 12px;
+      color: rgba(233,237,255,.9);
+      margin-top: 12px;
+      font-size: 18px;
+    }
+    table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:14px; }
+    th, td{ padding:12px 12px; border-bottom:1px solid rgba(255,255,255,.10); font-size:15px; }
+    th{ text-align:left; color:rgba(233,237,255,.92); background: rgba(255,255,255,.05); position:sticky; top:0; }
+    tr:last-child td{ border-bottom:none; }
+    td{ color:rgba(233,237,255,.86); }
+    .tag{ font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.12); }
+    .tag.low{ color:var(--bad); background: rgba(251,113,133,.10); }
+    .tag.mid{ color:var(--warn); background: rgba(251,191,36,.10); }
+    .tag.high{ color:var(--good); background: rgba(52,211,153,.10); }
+
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.60);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 24px;
+    }
+    .overlay.active{ display:flex; }
+    .modal{
+      width:min(980px, 100%);
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:20px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .thumbs{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .thumb{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      padding: 14px;
+      cursor:pointer;
+      transition: transform .12s ease, background .2s ease;
+      min-height: 92px;
+    }
+    .thumb:hover{ transform: translateY(-2px); background: rgba(255,255,255,.06); }
+    .thumb .n{ font-family:var(--mono); color:rgba(233,237,255,.7); font-size:12px; }
+    .thumb .t{ margin-top:6px; font-size:15px; color:rgba(233,237,255,.92); font-weight:700; }
+    .thumb .d{ margin-top:4px; font-size:13px; color:var(--muted); }
+
+    /* SEO checklist cards */
+    .checkgrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .check{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding: 14px;
+      min-height: 120px;
+    }
+    .check h4{ margin:0 0 8px; font-size:14px; letter-spacing:.04em; text-transform:uppercase; color:rgba(233,237,255,.85); }
+    .check p{ margin:0; font-size:14px; color:var(--muted); }
+    .check b{ color:var(--accent); }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .checkgrid{ grid-template-columns: 1fr; }
+      h1{ font-size:34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+
+    <!-- Slide 1 -->
+    <section class="slide active" data-title="Старт" data-desc="Про що презентація і як керувати">
+      <div class="topline">
+        <div>
+          <div class="kicker">11 клас · веб-дизайн + SEO</div>
+          <h1>Ергономіка веб-сторінки<br/>та SEO/просування</h1>
+          <p>Як розміщувати інформацію так, щоб її легко читали люди — і правильно “бачили” пошукові системи.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+          <div class="pill">Навігація: <b>← →</b> · Розкриття: <b>Space</b></div>
+          <div class="pill">Огляд слайдів: <b>O</b> · Допомога: <b>H</b></div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>План уроку</h3>
+          <ul class="reveal">
+            <li class="shown">Ергономіка: <b>читабельність</b>, структура, увага користувача</li>
+            <li>Правила розміщення: ієрархія, сітки, відступи, типографіка</li>
+            <li>SEO: як працює пошук, ключові елементи сторінки</li>
+            <li>Просування: контент, посилання, швидкість, аналітика</li>
+          </ul>
+          <div class="callout">Формула успіху: <b>зручно для людей</b> → <b>добре для пошуку</b>.</div>
+        </div>
+        <div class="card">
+          <h3>Керування презентацією</h3>
+          <p>Пункти з’являються поступово для темпу пояснення.</p>
+          <div class="hint">Space — наступний пункт<br/>Shift+Space — попередній пункт</div>
+          <p style="margin-top:12px;">На фіналі — короткий чек-лист для перевірки сайту.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>© Навчальна HTML презентація · офлайн запуск: збережіть як .html</div>
+        <div class="controls">
+          <button data-action="overview">Огляд (O)</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide" data-title="Ергономіка" data-desc="Що це і навіщо">
+      <div class="topline">
+        <div>
+          <div class="kicker">поняття</div>
+          <h2>Ергономіка веб-сторінки</h2>
+          <p><b>Ергономіка</b> — це правила та прийоми, які роблять сторінку <b>зручною</b>, <b>зрозумілою</b> і <b>швидкою для сприйняття</b>.</p>
+        </div>
+        <div class="pill">Ціль: <b>менше зусиль → більше дій</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Ознаки “зручної” сторінки</h3>
+          <ul class="reveal">
+            <li class="shown">Користувач за 3–5 секунд розуміє: <b>де він</b> і <b>що робити</b></li>
+            <li>Текст читається: є контраст, відступи, адекватна довжина рядка</li>
+            <li>Важливе — на видному місці (заголовок, кнопка, ціна, контакт)</li>
+            <li>Меню і навігація очевидні, без “квестів”</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Типові помилки</h3>
+          <ul class="reveal">
+            <li class="shown">Забагато тексту “суцільною стіною”</li>
+            <li>Немає ієрархії заголовків (все однаково важливе)</li>
+            <li>Малий контраст або дрібний шрифт</li>
+            <li>“Кольоровий шум” і надлишок ефектів</li>
+          </ul>
+          <div class="callout">Правило: якщо все виділене — не виділено нічого.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: конкретні правила розміщення інформації</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide" data-title="Ієрархія" data-desc="Візуальна структура і увага">
+      <div class="topline">
+        <div>
+          <div class="kicker">правила</div>
+          <h2>Візуальна ієрархія: що бачать першим</h2>
+          <p>Користувач сканує сторінку, а не читає її слово в слово. Тому важливо керувати увагою.</p>
+        </div>
+        <div class="pill">Ключ: <b>1 головне → 3 другорядні → деталі</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Інструменти ієрархії</h3>
+          <ul class="reveal">
+            <li class="shown"><b>Заголовки</b> H1 → H2 → H3 (логічна вкладеність)</li>
+            <li><b>Розмір</b> і <b>контраст</b> — для акцентів</li>
+            <li><b>Відступи</b> (whitespace) — щоб відділити блоки</li>
+            <li><b>Кнопка CTA</b> — одна головна дія на екран</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Сканування поглядом</h3>
+          <ul class="reveal">
+            <li class="shown">Короткі абзаци (2–4 рядки)</li>
+            <li>Списки замість довгих речень</li>
+            <li>Підзаголовки кожні 2–3 блоки тексту</li>
+            <li>Виділяйте ключові слова, але помірно</li>
+          </ul>
+          <div class="callout">Практика: прибери 30% тексту — і сторінка стане зрозумілішою.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: сітка, вирівнювання, типографіка</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide" data-title="Сітка і типографіка" data-desc="Grid/Flex, відступи, читабельність">
+      <div class="topline">
+        <div>
+          <div class="kicker">дизайн</div>
+          <h2>Сітка, вирівнювання та типографіка</h2>
+          <p>Структура сторінки тримається на сітці. Читабельність — на типографіці та контрасті.</p>
+        </div>
+        <div class="pill">CSS: <b>grid/flex</b> + <b>spacing</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Сітка та вирівнювання</h3>
+          <ul class="reveal">
+            <li class="shown">Використовуйте єдину ширину контейнера (макет)</li>
+            <li>Однакові відступи між секціями (вертикальний ритм)</li>
+            <li>Вирівнюйте елементи по лініях, а не “на око”</li>
+            <li>Не змішуйте багато різних стилів карток/кнопок</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Читабельність</h3>
+          <ul class="reveal">
+            <li class="shown">Контраст тексту і фону достатній</li>
+            <li>Розмір шрифту комфортний (часто 16–18px для тексту)</li>
+            <li>Довжина рядка не надто велика (≈ 45–75 символів)</li>
+            <li>Міжрядковий інтервал ~1.4–1.7</li>
+          </ul>
+          <div class="callout">Правило: дизайн має “зникати”, а зміст — лишатися.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: структура контенту (що і де розміщувати)</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide" data-title="Структура сторінки" data-desc="Що розміщують зверху та нижче">
+      <div class="topline">
+        <div>
+          <div class="kicker">композиція</div>
+          <h2>Ергономічне розміщення відомостей</h2>
+          <p>Зверху — найважливіше. Далі — докази/деталі. Наприкінці — підсумок і контакти.</p>
+        </div>
+        <div class="pill">Схема: <b>Hero → Переваги → Деталі → CTA</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Верх сторінки (Above the fold)</h3>
+          <ul class="reveal">
+            <li class="shown"><b>H1</b> (про що сторінка) + коротка обіцянка користі</li>
+            <li>Головна дія: кнопка/посилання (CTA)</li>
+            <li>Навігація: меню, логотип, пошук (якщо треба)</li>
+            <li>Короткі “факти довіри”: цифри, відгуки, партнерства</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Середина і низ</h3>
+          <ul class="reveal">
+            <li class="shown">Переваги (3–6) у картках/списку</li>
+            <li>Деталі: як працює, ціна/умови, приклади</li>
+            <li>FAQ: відповіді на типові питання</li>
+            <li>Контакти/форма + повтор CTA</li>
+          </ul>
+          <div class="callout">Порада: ставте CTA кілька разів, але не 10 на екран.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: SEO — як пошук “читає” сторінку</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide" data-title="SEO основи" data-desc="Як працює пошук і що оптимізують">
+      <div class="topline">
+        <div>
+          <div class="kicker">seo</div>
+          <h2>Пошукова оптимізація (SEO): основна ідея</h2>
+          <p><b>SEO</b> — це набір дій, щоб сторінки краще знаходилися в пошуку: за змістом, структурою та якістю.</p>
+        </div>
+        <div class="pill">Ціль: <b>релевантність</b> + <b>довіра</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Що робить пошук (спрощено)</h3>
+          <ul class="reveal">
+            <li class="shown"><b>Сканує</b> сторінки (індексація)</li>
+            <li><b>Розуміє тему</b> через текст, заголовки, мета-дані</li>
+            <li><b>Оцінює якість</b>: швидкість, мобільність, корисність</li>
+            <li><b>Ранжує</b>: показує найкращі відповіді вище</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Що оптимізують</h3>
+          <ul class="reveal">
+            <li class="shown"><b>On-page</b>: контент, заголовки, meta title/description, URL</li>
+            <li><b>Технічне</b>: швидкість, адаптивність, структура HTML</li>
+            <li><b>Off-page</b>: посилання на сайт, згадки, репутація</li>
+          </ul>
+          <div class="callout">SEO — це не “трюк”, а системна якість сторінок.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: елементи SEO на сторінці</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide" data-title="On-page SEO" data-desc="Title, description, headings, контент, alt">
+      <div class="topline">
+        <div>
+          <div class="kicker">seo на сторінці</div>
+          <h2>On-page SEO: що має бути в HTML</h2>
+          <p>Навіть простий сайт можна зробити “дружнім” до пошуку: структура + зміст + семантика.</p>
+        </div>
+        <div class="pill">Ключ: <b>семантичний HTML</b></div>
+      </div>
+
+      <div class="card">
+        <ul class="reveal">
+          <li class="shown"><b>Title</b> — коротко, по темі, з ключовою фразою</li>
+          <li><b>Meta description</b> — 1–2 речення: що отримає користувач</li>
+          <li><b>H1</b> — один на сторінку (головна тема)</li>
+          <li><b>H2/H3</b> — логічні підрозділи, без “стрибків”</li>
+          <li><b>Зміст</b> — унікальний, корисний, з прикладами</li>
+          <li><b>Alt для зображень</b> — описує зміст картинки</li>
+          <li><b>Зрозумілий URL</b> — короткий, читабельний</li>
+        </ul>
+        <div class="callout">Практика: “корисний зміст + хороша структура” = 80% базового SEO.</div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: технічне SEO і швидкість</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide" data-title="Технічне SEO" data-desc="Швидкість, мобільність, UX, індексація">
+      <div class="topline">
+        <div>
+          <div class="kicker">технічні аспекти</div>
+          <h2>Технічне SEO та якість сайту</h2>
+          <p>Пошук любить сторінки, які швидко завантажуються, працюють на телефоні й не ламаються.</p>
+        </div>
+        <div class="pill">Ключ: <b>performance + mobile</b></div>
+      </div>
+
+      <div class="checkgrid">
+        <div class="check">
+          <h4>Швидкість</h4>
+          <p><b>Стисніть</b> зображення, мінімізуйте зайві файли, уникайте “важких” шрифтів.</p>
+        </div>
+        <div class="check">
+          <h4>Мобільність</h4>
+          <p>Адаптивний дизайн (media queries), кнопки не “дрібні”, текст читається.</p>
+        </div>
+        <div class="check">
+          <h4>Семантика</h4>
+          <p>Header/Main/Footer, правильні заголовки, списки, підписи.</p>
+        </div>
+        <div class="check">
+          <h4>Навігація</h4>
+          <p>Логічні посилання, меню, “хлібні крихти” (за потреби), не “глухі” сторінки.</p>
+        </div>
+        <div class="check">
+          <h4>Помилки</h4>
+          <p>404 сторінки, биті посилання, дублікати — все це погіршує якість.</p>
+        </div>
+        <div class="check">
+          <h4>UX</h4>
+          <p>Зручність і зрозумілість підвищують довіру: люди довше лишаються на сайті.</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Далі: просування — як привернути аудиторію</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Далі →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide" data-title="Просування" data-desc="Контент, соцмережі, посилання, аналітика">
+      <div class="topline">
+        <div>
+          <div class="kicker">просування</div>
+          <h2>Просування веб-сайта: що працює (базово)</h2>
+          <p>Просування — це не лише реклама. Це контент + репутація + канали, де є ваша аудиторія.</p>
+        </div>
+        <div class="pill">Ціль: <b>трафік → довіра → результат</b></div>
+      </div>
+
+      <div class="card" style="padding:0; overflow:auto; max-height: 430px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Напрям</th>
+              <th>Що робити</th>
+              <th>Ефект</th>
+              <th>Складність</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Контент</b></td>
+              <td>Статті/пости/приклади, які відповідають на питання користувачів</td>
+              <td>Довгострокове зростання</td>
+              <td><span class="tag mid">Середня</span></td>
+            </tr>
+            <tr>
+              <td><b>Соцмережі</b></td>
+              <td>Публікації, короткі відео, посилання на сторінки сайту</td>
+              <td>Швидкий охоплення</td>
+              <td><span class="tag mid">Середня</span></td>
+            </tr>
+            <tr>
+              <td><b>Посилання</b></td>
+              <td>Згадки на інших сайтах, партнерства, каталоги (обережно)</td>
+              <td>Підсилення довіри</td>
+              <td><span class="tag high">Висока</span></td>
+            </tr>
+            <tr>
+              <td><b>Оптимізація</b></td>
+              <td>Поліпшення швидкості, структури, зручності</td>
+              <td>Підвищення конверсій</td>
+              <td><span class="tag mid">Середня</span></td>
+            </tr>
+            <tr>
+              <td><b>Аналітика</b></td>
+              <td>Вимірювати: перегляди, кліки, що читають, де виходять</td>
+              <td>Рішення на основі даних</td>
+              <td><span class="tag low">Низька</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <div>Далі: фінальний чек-лист “Ергономіка + SEO”</div>
+        <div class="controls">
+          <button data-action="prev">← Назад</button>
+          <button data-action="next">Фініш →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide" data-title="Чек-лист" data-desc="Швидка перевірка сторінки перед здачею">
+      <div class="topline">
+        <div>
+          <div class="kicker">підсумок</div>
+          <h2>Чек-лист перед публікацією</h2>
+          <p>Це мінімум, який робить сторінку зручною для людей і зрозумілою для пошуку.</p>
+        </div>
+        <div class="pill">Фокус: <b>людина + пошук</b></div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Ергономіка (UX)</h3>
+          <ul class="reveal">
+            <li class="shown">Є чіткий <b>H1</b> і зрозуміло, “про що сторінка”</li>
+            <li>Є <b>1 головна дія</b> (CTA) на екрані</li>
+            <li>Текст читається: контраст, відступи, короткі абзаци</li>
+            <li>Меню і навігація очевидні, без зайвих кроків</li>
+            <li>Сторінка коректна на телефоні</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>SEO (база)</h3>
+          <ul class="reveal">
+            <li class="shown">Title і description заповнені по темі</li>
+            <li>Заголовки H2/H3 логічні, без “хаосу”</li>
+            <li>Alt у зображень описує зміст</li>
+            <li>URL зрозумілий, без зайвих символів</li>
+            <li>Сторінка швидко завантажується</li>
+          </ul>
+          <div class="callout">Якщо “галочка” всюди — ваш сайт готовий до показу та пошуку.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Натисніть O для переходу до будь-якого слайду</div>
+        <div class="controls">
+          <button data-action="overview">Огляд (O)</button>
+          <button data-action="prev">← Назад</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="progressWrap" aria-hidden="true"><div class="progress" id="progress"></div></div>
+
+  <!-- Overview overlay -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Огляд слайдів">
+    <div class="modal">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+        <div>
+          <div class="kicker">навігація</div>
+          <div style="font-size:18px; font-weight:800;">Огляд слайдів</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="hint">Esc — закрити</div>
+          <button data-action="closeOverview">Закрити</button>
+        </div>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+  </div>
+
+  <!-- Help overlay -->
+  <div class="overlay" id="help" role="dialog" aria-modal="true" aria-label="Допомога">
+    <div class="modal">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;">
+        <div>
+          <div class="kicker">гарячі клавіші</div>
+          <div style="font-size:18px; font-weight:800;">Допомога</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="hint">Esc — закрити</div>
+          <button data-action="closeHelp">Закрити</button>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        <div class="card">
+          <h3>Слайди</h3>
+          <ul>
+            <li><span class="muted">→ / PageDown</span> — наступний</li>
+            <li><span class="muted">← / PageUp</span> — попередній</li>
+            <li><span class="muted">Home</span> — перший</li>
+            <li><span class="muted">End</span> — останній</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Розкриття пунктів</h3>
+          <ul>
+            <li><span class="muted">Space</span> — показати наступний пункт</li>
+            <li><span class="muted">Shift + Space</span> — повернути попередній</li>
+            <li><span class="muted">O</span> — огляд слайдів</li>
+            <li><span class="muted">H</span> — це вікно</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Порада: натискайте Space під час пояснення — це задає темп виступу.</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+      const overlay = document.getElementById('overlay');
+      const thumbs = document.getElementById('thumbs');
+      const help = document.getElementById('help');
+
+      let idx = 0;
+
+      const revealState = slides.map(s => {
+        const items = Array.from(s.querySelectorAll('.reveal li'));
+        const shown = items.filter(li => li.classList.contains('shown')).length;
+        return { items, shownCount: shown };
+      });
+
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+      function setActive(newIdx){
+        idx = clamp(newIdx, 0, slides.length - 1);
+        slides.forEach((s,i)=> s.classList.toggle('active', i === idx));
+        const pct = ((idx) / (slides.length - 1)) * 100;
+        progress.style.width = isFinite(pct) ? pct + '%' : '0%';
+        slides[idx].scrollTop = 0;
+      }
+
+      function nextSlide(){ setActive(idx + 1); }
+      function prevSlide(){ setActive(idx - 1); }
+
+      function revealNext(){
+        const st = revealState[idx];
+        const items = st.items;
+        if (!items.length) return false;
+        if (st.shownCount >= items.length) return false;
+        items[st.shownCount].classList.add('shown');
+        st.shownCount += 1;
+        return true;
+      }
+
+      function revealPrev(){
+        const st = revealState[idx];
+        const items = st.items;
+        if (!items.length) return false;
+        if (st.shownCount <= 0) return false;
+        st.shownCount -= 1;
+        items[st.shownCount].classList.remove('shown');
+        return true;
+      }
+
+      function openOverview(){
+        thumbs.innerHTML = '';
+        slides.forEach((s, i)=>{
+          const div = document.createElement('div');
+          div.className = 'thumb';
+          div.innerHTML = `
+            <div class="n">#${String(i+1).padStart(2,'0')}</div>
+            <div class="t">${s.dataset.title || ('Слайд ' + (i+1))}</div>
+            <div class="d">${s.dataset.desc || ''}</div>
+          `;
+          div.addEventListener('click', ()=>{
+            closeOverview();
+            setActive(i);
+          });
+          thumbs.appendChild(div);
+        });
+        overlay.classList.add('active');
+      }
+      function closeOverview(){ overlay.classList.remove('active'); }
+
+      function openHelp(){ help.classList.add('active'); }
+      function closeHelp(){ help.classList.remove('active'); }
+
+      document.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const a = btn.dataset.action;
+        if (a === 'next') nextSlide();
+        if (a === 'prev') prevSlide();
+        if (a === 'overview') openOverview();
+        if (a === 'closeOverview') closeOverview();
+        if (a === 'closeHelp') closeHelp();
+      });
+
+      document.addEventListener('keydown', (e)=>{
+        const inOverlay = overlay.classList.contains('active') || help.classList.contains('active');
+        if (e.key === 'Escape'){
+          if (overlay.classList.contains('active')) closeOverview();
+          if (help.classList.contains('active')) closeHelp();
+          return;
+        }
+        if (inOverlay) return;
+
+        if (e.key === 'ArrowRight' || e.key === 'PageDown'){
+          nextSlide(); e.preventDefault();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp'){
+          prevSlide(); e.preventDefault();
+        } else if (e.key === 'Home'){
+          setActive(0); e.preventDefault();
+        } else if (e.key === 'End'){
+          setActive(slides.length-1); e.preventDefault();
+        } else if (e.key === ' '){
+          const backward = e.shiftKey;
+          const ok = backward ? revealPrev() : revealNext();
+          if (!ok && !backward) nextSlide();
+          e.preventDefault();
+        } else if (e.key.toLowerCase() === 'o'){
+          openOverview(); e.preventDefault();
+        } else if (e.key.toLowerCase() === 'h'){
+          openHelp(); e.preventDefault();
+        }
+      });
+
+      overlay.addEventListener('click', (e)=>{ if (e.target === overlay) closeOverview(); });
+      help.addEventListener('click', (e)=>{ if (e.target === help) closeHelp(); });
+
+      setActive(0);
+    })();
+  </script>
+</body>
+</html>
