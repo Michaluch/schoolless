@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Основи HTML — довідка-лендінг</title>
+  <meta name="description" content="Сучасний лендінг-довідка для учнів 10–11 класів: Основи HTML, приклади, підказки, практика." />
+  <style>
+    :root{
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --faint: rgba(255,255,255,.55);
+      --stroke: rgba(255,255,255,.14);
+      --accent: #7c5cff;
+      --accent2:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+
+      --radius: 18px;
+      --radius2: 22px;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --shadow2: 0 10px 35px rgba(0,0,0,.35);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 12% 10%, rgba(124,92,255,.32), transparent 55%),
+        radial-gradient(900px 600px at 80% 18%, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(1000px 700px at 55% 85%, rgba(59,130,246,.14), transparent 58%),
+        linear-gradient(180deg, #070a14, #0b1020 30%, #0b1020 70%, #070a14);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .container{max-width:1180px;margin:0 auto;padding:0 20px}
+
+    /* Top nav */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(14px);
+      background: rgba(7,10,20,.55);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+    }
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: conic-gradient(from 180deg, var(--accent), #3b82f6, var(--accent2), var(--accent));
+      box-shadow: 0 10px 25px rgba(124,92,255,.25);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .brand b{letter-spacing:.2px}
+    .brand span{color:var(--muted); font-size:13px}
+
+    .nav{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .nav a{
+      text-decoration:none;
+      font-size:13px;
+      color: var(--muted);
+      padding:8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: .18s ease;
+      white-space:nowrap;
+    }
+    .nav a:hover{
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.10);
+    }
+
+    .nav-right{
+      display:flex; align-items:center; gap:10px;
+    }
+
+    .chip{
+      display:flex; align-items:center; gap:8px;
+      padding:9px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:13px;
+      user-select:none;
+    }
+    .chip strong{color: var(--text); font-weight:600}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      font-size:13px;
+      cursor:pointer;
+      transition:.18s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{
+      border-color: rgba(124,92,255,.45);
+      background: linear-gradient(135deg, rgba(124,92,255,.30), rgba(59,130,246,.20));
+      box-shadow: 0 14px 40px rgba(124,92,255,.18);
+    }
+    .btn.primary:hover{background: linear-gradient(135deg, rgba(124,92,255,.40), rgba(59,130,246,.26))}
+    .btn.small{padding:8px 10px; border-radius: 12px}
+
+    /* Hero */
+    .hero{
+      padding: 42px 0 10px;
+      position:relative;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      align-items:stretch;
+    }
+    .card{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .hero-left{
+      padding: 28px;
+      position:relative;
+    }
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:13px;
+      margin-bottom:14px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.16);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 3.2vw, 42px);
+      line-height:1.08;
+      letter-spacing: -.5px;
+    }
+    .lead{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height:1.6;
+      max-width: 62ch;
+    }
+    .hero-actions{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin: 14px 0 0;
+    }
+
+    .hero-right{
+      padding: 18px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .mini{
+      padding:14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .mini h3{margin:0 0 8px; font-size:14px}
+    .mini p{margin:0; color:var(--muted); font-size:13px; line-height:1.55}
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      padding:12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.10);
+    }
+    .stat b{display:block; font-size:18px}
+    .stat span{color:var(--muted); font-size:12px}
+
+    /* Main layout */
+    .main{
+      display:grid;
+      grid-template-columns: 310px 1fr;
+      gap: 18px;
+      padding: 18px 0 60px;
+      align-items:start;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position: sticky;
+      top: 76px;
+    }
+    .sidebar .card{padding: 14px}
+    .search{
+      display:flex; gap:10px; align-items:center;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.12);
+    }
+    .search input{
+      width:100%;
+      background: transparent;
+      border:0;
+      outline:none;
+      color: var(--text);
+      font-size: 13px;
+    }
+    .search input::placeholder{color: rgba(255,255,255,.45)}
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      border:1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.62);
+      background: rgba(255,255,255,.06);
+      user-select:none;
+    }
+    .toc{
+      margin-top: 10px;
+      display:flex; flex-direction:column; gap:6px;
+      max-height: 62vh; overflow:auto; padding-right: 6px;
+    }
+    .toc a{
+      text-decoration:none;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 9px 10px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      transition: .15s ease;
+      display:flex; gap:10px; align-items:flex-start;
+    }
+    .toc a:hover{background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.10); color: var(--text)}
+    .toc a.active{
+      background: linear-gradient(135deg, rgba(124,92,255,.22), rgba(59,130,246,.14));
+      border-color: rgba(124,92,255,.28);
+      color: var(--text);
+    }
+    .toc small{color: rgba(255,255,255,.45); font-size: 11px}
+    .toc .num{
+      width:22px; height:22px; border-radius:10px;
+      display:inline-flex; align-items:center; justify-content:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      font-size: 11px;
+      color: rgba(255,255,255,.72);
+      flex:0 0 auto;
+    }
+
+    /* Content */
+    .content{display:flex; flex-direction:column; gap:16px}
+    section.card{
+      padding: 20px;
+      scroll-margin-top: 86px;
+    }
+    section h2{
+      margin:0 0 10px;
+      font-size: 20px;
+      letter-spacing: -.2px;
+    }
+    .sub{
+      margin:0 0 14px;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height:1.6;
+    }
+
+    .grid2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    .grid3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px}
+
+    .note{
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.55;
+    }
+    .note strong{color: var(--text)}
+    .note.ok{border-color: rgba(34,197,94,.30); background: rgba(34,197,94,.08)}
+    .note.warn{border-color: rgba(245,158,11,.28); background: rgba(245,158,11,.10)}
+    .note.bad{border-color: rgba(239,68,68,.26); background: rgba(239,68,68,.09)}
+
+    .pillrow{display:flex; flex-wrap:wrap; gap:8px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+      font-size: 12px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .pill .badge{
+      font-family: var(--mono);
+      padding: 3px 6px;
+      border-radius: 9px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.78);
+      font-size: 11px;
+    }
+
+    pre{
+      margin:0;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      overflow:auto;
+      box-shadow: 0 18px 45px rgba(0,0,0,.28);
+    }
+    code{font-family: var(--mono); font-size: 12.5px; color: rgba(255,255,255,.88)}
+    .codebar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; margin-bottom: 10px;
+    }
+    .codebar .title{
+      display:flex; align-items:center; gap:10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dots{
+      display:flex; gap:6px;
+    }
+    .dots i{width:10px;height:10px;border-radius:99px; display:inline-block; opacity:.85}
+    .dots i:nth-child(1){background:#ef4444}
+    .dots i:nth-child(2){background:#f59e0b}
+    .dots i:nth-child(3){background:#22c55e}
+    .copy{
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-size: 12px;
+      cursor:pointer;
+      transition: .15s ease;
+    }
+    .copy:hover{background: rgba(255,255,255,.10); transform: translateY(-1px)}
+    .copy:active{transform: translateY(0px)}
+
+    .qa{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    details{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      padding: 12px 14px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      font-weight:600;
+      font-size: 13.5px;
+    }
+    summary::-webkit-details-marker{display:none}
+    details p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.6;
+    }
+    details code{font-size: 12px}
+
+    /* Practice */
+    .practice{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      align-items:stretch;
+    }
+    .editor{
+      display:flex; flex-direction:column; gap:10px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    textarea{
+      width:100%;
+      min-height: 210px;
+      resize: vertical;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height:1.5;
+      padding: 12px;
+      outline:none;
+    }
+    .preview{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      min-height: 292px;
+      display:flex; flex-direction:column;
+    }
+    .preview header{
+      padding:10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      font-size: 12px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      background: rgba(0,0,0,.12);
+    }
+    .framewrap{flex:1; background:white}
+    iframe{
+      width:100%;
+      height:100%;
+      border:0;
+    }
+
+    /* Footer */
+    footer{
+      padding: 30px 0 50px;
+      color: var(--faint);
+      font-size: 12.5px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.10);
+    }
+    footer .row{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:18px; flex-wrap:wrap;
+    }
+    footer b{color: var(--text)}
+    .muted{color: var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns: 1fr}
+      .main{grid-template-columns: 1fr}
+      .sidebar{position:relative; top:0}
+      .toc{max-height:none}
+      .practice{grid-template-columns: 1fr}
+    }
+
+    /* Print */
+    @media print{
+      .topbar, .sidebar, .hero-actions, .copy, .btn, .chip, .kbd, .practice{display:none !important}
+      body{background:white; color:#111}
+      .card{box-shadow:none; border:1px solid #ddd; background:white}
+      code{color:#111}
+      pre{background:#f6f6f6; border:1px solid #ddd}
+      section{break-inside:avoid}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar" role="banner">
+    <div class="container">
+      <div class="topbar-inner">
+        <a class="brand" href="#top" aria-label="Повернутися на початок">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <b>Основи HTML</b><br>
+            <span>Довідка-лендінг для 10–11 класів</span>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Швидка навігація">
+          <a href="#what">Що таке HTML</a>
+          <a href="#structure">Структура</a>
+          <a href="#text">Текст</a>
+          <a href="#links">Посилання</a>
+          <a href="#media">Зображення</a>
+          <a href="#lists">Списки</a>
+          <a href="#tables">Таблиці</a>
+          <a href="#forms">Форми</a>
+          <a href="#semantic">Семантика</a>
+          <a href="#practice">Практика</a>
+        </nav>
+
+        <div class="nav-right">
+          <div class="chip" title="Підказка: Ctrl/⌘ + K — фокус у пошуку">
+            <strong>HTML</strong> <span>cheat-sheet</span>
+          </div>
+          <button class="btn primary" id="printBtn" type="button" title="Зберегти як PDF через друк браузера">
+            🖨️ Друк / PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="container">
+      <section class="hero">
+        <div class="hero-grid">
+          <div class="card hero-left">
+            <div class="kicker"><span class="dot" aria-hidden="true"></span> Стисла і практична довідка + приклади коду</div>
+            <h1>HTML — мова розмітки, з якої починається будь-яка вебсторінка.</h1>
+            <p class="lead">
+              На цій сторінці зібрано базові теги, правила структури, семантика, форми і типові помилки.
+              Є кнопки копіювання прикладів та міні-пісочниця для практики.
+            </p>
+            <div class="pillrow" aria-label="Що тут є">
+              <div class="pill"><span class="badge">&lt;!doctype&gt;</span> старт документа</div>
+              <div class="pill"><span class="badge">&lt;head&gt;</span> метадані</div>
+              <div class="pill"><span class="badge">&lt;body&gt;</span> вміст</div>
+              <div class="pill"><span class="badge">a/img</span> посилання/медіа</div>
+              <div class="pill"><span class="badge">form</span> введення даних</div>
+              <div class="pill"><span class="badge">header/main/footer</span> семантика</div>
+            </div>
+
+            <div class="hero-actions">
+              <a class="btn primary" href="#practice">▶ Почати практику</a>
+              <a class="btn" href="#structure">📘 До структури HTML</a>
+              <a class="btn" href="#common">⚠ Типові помилки</a>
+            </div>
+          </div>
+
+          <aside class="card hero-right" aria-label="Швидкі підказки">
+            <div class="mini">
+              <h3>Як користуватись</h3>
+              <p>Клацай по розділах зліва, копіюй приклади, змінюй код у «Практиці» й одразу дивись результат.</p>
+            </div>
+            <div class="mini">
+              <h3>Правило №1</h3>
+              <p><b>HTML описує структуру</b>. Дизайн — переважно <b>CSS</b>, інтерактив — <b>JS</b>.</p>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <b>10+</b><span>розділів</span>
+              </div>
+              <div class="stat">
+                <b>20+</b><span>прикладів</span>
+              </div>
+              <div class="stat">
+                <b>100%</b><span>один файл</span>
+              </div>
+              <div class="stat">
+                <b>CTRL+K</b><span>пошук</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <div class="main">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Бокова навігація">
+          <div class="card">
+            <div class="search" role="search">
+              🔎
+              <input id="search" type="search" placeholder="Пошук по темах… (Ctrl/⌘+K)" aria-label="Пошук по довідці">
+              <span class="kbd" aria-hidden="true">Ctrl K</span>
+            </div>
+
+            <nav class="toc" id="toc" aria-label="Зміст">
+              <a href="#what" data-keywords="що таке html мова розмітки теги атрибути" class="active">
+                <span class="num">1</span>
+                <div>
+                  <div>Що таке HTML</div>
+                  <small>теги, атрибути, вкладеність</small>
+                </div>
+              </a>
+              <a href="#structure" data-keywords="структура doctype html head body meta title charset viewport">
+                <span class="num">2</span>
+                <div>
+                  <div>Структура документа</div>
+                  <small>DOCTYPE, head, body</small>
+                </div>
+              </a>
+              <a href="#text" data-keywords="заголовки абзаци форматування strong em br hr цитати pre code">
+                <span class="num">3</span>
+                <div>
+                  <div>Текст і заголовки</div>
+                  <small>h1–h6, p, strong/em</small>
+                </div>
+              </a>
+              <a href="#links" data-keywords="посилання a href target blank якорі mailto tel">
+                <span class="num">4</span>
+                <div>
+                  <div>Посилання і якорі</div>
+                  <small>a, href, target</small>
+                </div>
+              </a>
+              <a href="#media" data-keywords="зображення img alt src picture source відео audio">
+                <span class="num">5</span>
+                <div>
+                  <div>Зображення і медіа</div>
+                  <small>img, alt, video</small>
+                </div>
+              </a>
+              <a href="#lists" data-keywords="списки ul ol li dl dt dd">
+                <span class="num">6</span>
+                <div>
+                  <div>Списки</div>
+                  <small>ul/ol/dl</small>
+                </div>
+              </a>
+              <a href="#tables" data-keywords="таблиці table tr th td thead tbody tfoot caption">
+                <span class="num">7</span>
+                <div>
+                  <div>Таблиці</div>
+                  <small>thead/tbody, caption</small>
+                </div>
+              </a>
+              <a href="#forms" data-keywords="форми form input label textarea select option button required name value">
+                <span class="num">8</span>
+                <div>
+                  <div>Форми</div>
+                  <small>input, label, required</small>
+                </div>
+              </a>
+              <a href="#semantic" data-keywords="семантика header nav main section article aside footer figure figcaption">
+                <span class="num">9</span>
+                <div>
+                  <div>Семантичні теги</div>
+                  <small>layout, доступність</small>
+                </div>
+              </a>
+              <a href="#common" data-keywords="помилки вкладеність alt h1 багато title шляхі">
+                <span class="num">10</span>
+                <div>
+                  <div>Типові помилки</div>
+                  <small>як не зламати сторінку</small>
+                </div>
+              </a>
+              <a href="#practice" data-keywords="практика редактор превʼю вправа завдання">
+                <span class="num">11</span>
+                <div>
+                  <div>Практика</div>
+                  <small>редактор + результат</small>
+                </div>
+              </a>
+            </nav>
+          </div>
+        </aside>
+
+        <!-- Content -->
+        <div class="content" aria-label="Матеріали довідки">
+          <section id="what" class="card">
+            <h2>1) Що таке HTML</h2>
+            <p class="sub">
+              <b>HTML (HyperText Markup Language)</b> — мова розмітки, яка описує <b>структуру</b> вебсторінки:
+              заголовки, абзаци, списки, таблиці, форми, зображення тощо.
+            </p>
+
+            <div class="grid2">
+              <div class="note">
+                <strong>Тег</strong> — “цеглинка” сторінки. Пишеться в кутових дужках: <code>&lt;p&gt;</code>.
+                Більшість тегів мають <strong>відкривальний</strong> і <strong>закривальний</strong> варіант:
+                <code>&lt;p&gt;текст&lt;/p&gt;</code>.
+              </div>
+              <div class="note">
+                <strong>Атрибут</strong> — налаштування тега. Наприклад, посилання:
+                <code>&lt;a href="https://example.com"&gt;...&lt;/a&gt;</code>.
+                Атрибути зазвичай мають формат <code>ім'я="значення"</code>.
+              </div>
+            </div>
+
+            <div class="note ok" style="margin-top:12px">
+              <strong>Вкладеність:</strong> теги можуть бути всередині інших тегів. Головне — <b>правильно закривати</b>:
+              <code>&lt;p&gt;Привіт, &lt;strong&gt;світ&lt;/strong&gt;!&lt;/p&gt;</code>
+            </div>
+          </section>
+
+          <section id="structure" class="card">
+            <h2>2) Структура HTML-документа</h2>
+            <p class="sub">Мінімальний «каркас» сторінки. Це те, з чого починається будь-який файл <code>.html</code>.</p>
+
+            <div class="codebar">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: базовий шаблон</div>
+              <button class="copy" data-copy="code-structure">Копіювати</button>
+            </div>
+            <pre><code id="code-structure">&lt;!doctype html&gt;
+&lt;html lang=&quot;uk&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;Моя перша сторінка&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Привіт, HTML!&lt;/h1&gt;
+  &lt;p&gt;Це мій перший абзац.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <div class="grid3" style="margin-top:12px">
+              <div class="note"><strong>&lt;!doctype html&gt;</strong><br>Вмикає сучасний режим HTML5 у браузері.</div>
+              <div class="note"><strong>&lt;head&gt;</strong><br>Метадані: кодування, назва, підключення CSS/JS.</div>
+              <div class="note"><strong>&lt;body&gt;</strong><br>Усе, що бачить користувач: текст, картинки, кнопки.</div>
+            </div>
+
+            <div class="note warn" style="margin-top:12px">
+              <strong>Важливо:</strong> <code>meta viewport</code> потрібен, щоб сторінка добре виглядала на телефонах.
+            </div>
+          </section>
+
+          <section id="text" class="card">
+            <h2>3) Текст і заголовки</h2>
+            <p class="sub">
+              Заголовки задають ієрархію (як план). На сторінці зазвичай <b>один</b> <code>&lt;h1&gt;</code>,
+              а далі — <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code> і т.д.
+            </p>
+
+            <div class="codebar">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: заголовки і форматування</div>
+              <button class="copy" data-copy="code-text">Копіювати</button>
+            </div>
+            <pre><code id="code-text">&lt;h1&gt;Мій навчальний сайт&lt;/h1&gt;
+
+&lt;h2&gt;Розділ 1&lt;/h2&gt;
+&lt;p&gt;Це абзац. Виділимо &lt;strong&gt;важливе&lt;/strong&gt; і &lt;em&gt;акцент&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h3&gt;Мінітема&lt;/h3&gt;
+&lt;p&gt;Перенесення рядка робиться через &lt;br&gt; (але не зловживай).&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;pre&gt;&lt;code&gt;const x = 10;
+console.log(x);&lt;/code&gt;&lt;/pre&gt;</code></pre>
+
+
+            <div class="note ok" style="margin-top:12px">
+              <strong>Порада:</strong> для “жирного” й “курсиву” краще використовувати <code>&lt;strong&gt;</code> і <code>&lt;em&gt;</code>,
+              бо вони мають смисл (семантику), а не просто стиль.
+            </div>
+          </section>
+
+          <section id="links" class="card">
+            <h2>4) Посилання і якорі</h2>
+            <p class="sub">
+              Посилання створює тег <code>&lt;a&gt;</code>. Атрибут <code>href</code> — куди перейти.
+              Для відкриття в новій вкладці: <code>target="_blank"</code> + <code>rel="noopener noreferrer"</code>.
+            </p>
+
+            <div class="grid2">
+              <div>
+                <div class="codebar">
+                  <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Зовнішнє посилання</div>
+                  <button class="copy" data-copy="code-link1">Копіювати</button>
+                </div>
+                <pre><code id="code-link1">&lt;a href=&quot;https://developer.mozilla.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;
+  Документація MDN
+&lt;/a&gt;</code></pre>
+              </div>
+
+              <div>
+                <div class="codebar">
+                  <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Якір (перехід по сторінці)</div>
+                  <button class="copy" data-copy="code-link2">Копіювати</button>
+                </div>
+                <pre><code id="code-link2">&lt;a href=&quot;#contacts&quot;&gt;До контактів&lt;/a&gt;
+
+&lt;!-- десь нижче --&gt;
+&lt;section id=&quot;contacts&quot;&gt;
+  &lt;h2&gt;Контакти&lt;/h2&gt;
+&lt;/section&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="note" style="margin-top:12px">
+              Ще корисно: <code>mailto:</code> (лист) і <code>tel:</code> (дзвінок):
+              <code>&lt;a href="mailto:info@example.com"&gt;</code>, <code>&lt;a href="tel:+380..."&gt;</code>
+            </div>
+          </section>
+
+          <section id="media" class="card">
+            <h2>5) Зображення і медіа</h2>
+            <p class="sub">
+              Для картинки використовуй <code>&lt;img&gt;</code>. Атрибут <code>alt</code> — <b>обовʼязково</b>:
+              він допомагає людям зі скрінрідерами й показується, якщо зображення не завантажилось.
+            </p>
+
+            <div class="codebar">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: img + підпис</div>
+              <button class="copy" data-copy="code-img">Копіювати</button>
+            </div>
+            <pre><code id="code-img">&lt;figure&gt;
+  &lt;img src=&quot;images/cat.jpg&quot; alt=&quot;Рудий кіт дивиться в камеру&quot; width=&quot;480&quot;&gt;
+  &lt;figcaption&gt;Моє зображення з підписом&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+
+            <div class="grid2" style="margin-top:12px">
+              <div class="note ok">
+                <strong>alt-підказка:</strong><br>
+                Описуй суть: “Графік зростання продажів у 2025” краще ніж “картинка”.
+              </div>
+              <div class="note warn">
+                <strong>Шляхи:</strong><br>
+                <code>src="cat.jpg"</code> — файл поруч із HTML;<br>
+                <code>src="images/cat.jpg"</code> — у папці images.
+              </div>
+            </div>
+
+                    <div class="codebar" style="margin-top:12px">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: відео</div>
+              <button class="copy" data-copy="code-video">Копіювати</button>
+            </div>
+            <pre><code id="code-video">&lt;video controls width=&quot;520&quot;&gt;
+  &lt;source src=&quot;media/intro.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  Ваш браузер не підтримує відео.
+&lt;/video&gt;</code></pre>
+          </section>
+
+          <section id="lists" class="card">
+            <h2>6) Списки</h2>
+            <p class="sub">
+              Списки роблять контент читабельним. Є марковані (<code>ul</code>), нумеровані (<code>ol</code>) і описові (<code>dl</code>).
+            </p>
+
+            <div class="grid2">
+              <div>
+                <div class="codebar">
+                  <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> ul / ol</div>
+                  <button class="copy" data-copy="code-lists1">Копіювати</button>
+                </div>
+                <pre><code id="code-lists1">&lt;h3&gt;Потрібно вивчити&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Теги&lt;/li&gt;
+  &lt;li&gt;Атрибути&lt;/li&gt;
+  &lt;li&gt;Структуру документа&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Кроки&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;Створи файл index.html&lt;/li&gt;
+  &lt;li&gt;Додай базовий шаблон&lt;/li&gt;
+  &lt;li&gt;Перевір у браузері&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+              </div>
+
+              <div>
+                <div class="codebar">
+                  <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> dl (терміни)</div>
+                  <button class="copy" data-copy="code-lists2">Копіювати</button>
+                </div>
+                <pre><code id="code-lists2">&lt;dl&gt;
+  &lt;dt&gt;HTML&lt;/dt&gt;
+  &lt;dd&gt;Мова розмітки для структури сторінки.&lt;/dd&gt;
+
+  &lt;dt&gt;CSS&lt;/dt&gt;
+  &lt;dd&gt;Мова стилів для дизайну.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <section id="tables" class="card">
+            <h2>7) Таблиці</h2>
+            <p class="sub">
+              Таблиці — для табличних даних (розклад, результати, статистика). Не для “верстки макета”.
+            </p>
+
+            <div class="codebar">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: table з thead/tbody</div>
+              <button class="copy" data-copy="code-table">Копіювати</button>
+            </div>
+            <pre><code id="code-table">&lt;table&gt;
+  &lt;caption&gt;Оцінки за семестр&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Предмет&lt;/th&gt;
+      &lt;th&gt;Оцінка&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Інформатика&lt;/td&gt;
+      &lt;td&gt;11&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Математика&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+
+
+            <div class="note warn" style="margin-top:12px">
+              <strong>Порада:</strong> заголовкові клітинки — <code>&lt;th&gt;</code>, звичайні — <code>&lt;td&gt;</code>.
+              Підпис таблиці — <code>&lt;caption&gt;</code>.
+            </div>
+          </section>
+
+          <section id="forms" class="card">
+            <h2>8) Форми</h2>
+            <p class="sub">
+              Форми збирають дані: імʼя, email, вибір варіанту. Важливо поєднувати <code>&lt;label&gt;</code> з полем через <code>for</code> та <code>id</code>.
+            </p>
+
+            <div class="codebar">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: форма реєстрації</div>
+              <button class="copy" data-copy="code-form">Копіювати</button>
+            </div>
+            <pre><code id="code-form">&lt;form action=&quot;/send&quot; method=&quot;post&quot;&gt;
+  &lt;div&gt;
+    &lt;label for=&quot;name&quot;&gt;Імʼя&lt;/label&gt;
+    &lt;input id=&quot;name&quot; name=&quot;name&quot; type=&quot;text&quot; required&gt;
+  &lt;/div&gt;
+
+  &lt;div&gt;
+    &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+    &lt;input id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot; required&gt;
+  &lt;/div&gt;
+
+  &lt;div&gt;
+    &lt;label for=&quot;grade&quot;&gt;Клас&lt;/label&gt;
+    &lt;select id=&quot;grade&quot; name=&quot;grade&quot;&gt;
+      &lt;option value=&quot;10&quot;&gt;10&lt;/option&gt;
+      &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+
+  &lt;div&gt;
+    &lt;label for=&quot;msg&quot;&gt;Коментар&lt;/label&gt;
+    &lt;textarea id=&quot;msg&quot; name=&quot;msg&quot; rows=&quot;4&quot;&gt;&lt;/textarea&gt;
+  &lt;/div&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;Надіслати&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+            <div class="grid2" style="margin-top:12px">
+              <div class="note ok">
+                <strong>required</strong> — не дасть відправити форму без заповнення поля.
+              </div>
+              <div class="note">
+                <strong>name</strong> — ключ, під яким дані поля передаються на сервер (або читаються JS).
+              </div>
+            </div>
+          </section>
+
+
+  <section id="semantic" class="card">
+            <h2>9) Семантичні теги</h2>
+            <p class="sub">
+              Семантичні теги роблять структуру сторінки зрозумілою для людей, пошуковиків і технологій доступності.
+              Це “правильні назви блоків” замість хаотичних <code>&lt;div&gt;</code>.
+            </p>
+
+            <div class="codebar">
+              <div class="title"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> Приклад: макет сторінки</div>
+              <button class="copy" data-copy="code-sem">Копіювати</button>
+            </div>
+            <pre><code id="code-sem">&lt;header&gt;
+  &lt;h1&gt;Мій сайт&lt;/h1&gt;
+  &lt;nav&gt;
+    &lt;a href=&quot;#about&quot;&gt;Про нас&lt;/a&gt;
+    &lt;a href=&quot;#contacts&quot;&gt;Контакти&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;section id=&quot;about&quot;&gt;
+    &lt;h2&gt;Про нас&lt;/h2&gt;
+    &lt;p&gt;Короткий опис...&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;article&gt;
+    &lt;h2&gt;Новина&lt;/h2&gt;
+    &lt;p&gt;Текст новини...&lt;/p&gt;
+  &lt;/article&gt;
+
+  &lt;aside&gt;
+    &lt;h3&gt;Додатково&lt;/h3&gt;
+    &lt;p&gt;Посилання, підказки...&lt;/p&gt;
+  &lt;/aside&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+  &lt;p&gt;© 2026&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+
+            <div class="note ok" style="margin-top:12px">
+              <strong>Мінімум:</strong> <code>header</code> + <code>main</code> + <code>footer</code> — уже дає акуратну структуру.
+            </div>
+          </section>
+
+          <section id="common" class="card">
+            <h2>10) Типові помилки (і як їх уникнути)</h2>
+            <div class="qa">
+              <details open>
+                <summary>❌ Неправильне закриття тегів <span class="muted">→ ламана структура</span></summary>
+                <p>Правильно: <code>&lt;p&gt;Текст &lt;strong&gt;важливо&lt;/strong&gt;&lt;/p&gt;</code><br>
+                   Неправильно: <code>&lt;p&gt;Текст &lt;strong&gt;важливо&lt;/p&gt;&lt;/strong&gt;</code></p>
+              </details>
+
+              <details>
+                <summary>❌ Немає <code>alt</code> у <code>&lt;img&gt;</code> <span class="muted">→ гірша доступність</span></summary>
+                <p>Завжди додавай: <code>&lt;img src="..." alt="Опис"&gt;</code></p>
+              </details>
+
+              <details>
+                <summary>⚠ Багато <code>&lt;h1&gt;</code> <span class="muted">→ погана ієрархія</span></summary>
+                <p>Зазвичай <code>h1</code> — один (назва сторінки). Розділи: <code>h2</code>, підрозділи: <code>h3</code>.</p>
+              </details>
+
+              <details>
+                <summary>⚠ Таблиці “для верстки” <span class="muted">→ застарілий підхід</span></summary>
+                <p>Для макетів використовуй семантику + CSS. Таблиці залишай для табличних даних.</p>
+              </details>
+
+              <details>
+                <summary>⚠ Відсутній <code>meta viewport</code> <span class="muted">→ погано на мобільних</span></summary>
+                <p>Додай у <code>&lt;head&gt;</code>: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></p>
+              </details>
+            </div>
+
+
+                    <div class="note bad" style="margin-top:12px">
+              <strong>Головне правило:</strong> якщо щось “дивно відображається” — перевір вкладеність, закриття тегів і атрибути.
+            </div>
+          </section>
+
+          <section id="practice" class="card">
+            <h2>11) Практика: міні-редактор + результат</h2>
+            <p class="sub">
+              Зміни HTML у полі зліва та натисни <b>Оновити превʼю</b>.
+              Порада: спробуй додати заголовок, список, посилання і зображення (можна з інтернет-URL).
+            </p>
+
+            <div class="practice">
+              <div class="editor">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between">
+                  <div class="note" style="margin:0; flex:1">
+                    <strong>Завдання:</strong> зроби міні-лендінг про своє хобі (h1, абзац, ul, a, img).
+                  </div>
+                  <div style="display:flex; gap:10px">
+                    <button class="btn small" type="button" id="resetBtn">↺ Скинути</button>
+                    <button class="btn small primary" type="button" id="runBtn">⚡ Оновити превʼю</button>
+                  </div>
+                </div>
+
+                <textarea id="editor" spellcheck="false" aria-label="HTML редактор"></textarea>
+
+                <div class="note ok" style="margin:0">
+                  <strong>Підказка:</strong> у превʼю працює лише HTML (без доступу до ваших файлів). Для картинки можна дати повний URL.
+                </div>
+              </div>
+
+              <div class="preview" aria-label="Превʼю результату">
+                <header>
+                  <span>Превʼю</span>
+                  <span class="muted">sandbox iframe</span>
+                </header>
+                <div class="framewrap">
+                  <iframe id="frame" sandbox="allow-same-origin" title="Превʼю HTML"></iframe>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  
+           <footer role="contentinfo">
+    <div class="container">
+      <div class="row">
+        <div>
+          <b>Порада для вчителя/учня:</b>
+          <div class="muted">Цей лендінг — один файл. Збережи як <code>index.html</code> і відкрий у браузері.</div>
+        </div>
+        <div class="muted">
+          Гарна практика: зроби копію → зміни тексти → додай розділи → стилізуй CSS.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- Utilities
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    // Print / PDF
+    $("#printBtn").addEventListener("click", () => window.print());
+
+    // Copy buttons
+    $$(".copy").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-copy");
+        const text = $("#"+id)?.innerText ?? "";
+        try{
+          await navigator.clipboard.writeText(text);
+          const old = btn.textContent;
+          btn.textContent = "✅ Скопійовано";
+          setTimeout(() => btn.textContent = old, 900);
+        }catch(e){
+          // Fallback reminder
+          alert("Не вдалося скопіювати автоматично. Виділи код і скопіюй вручну (Ctrl+C).");
+        }
+      });
+    });
+
+    // Active TOC highlight (scrollspy)
+    const tocLinks = $$("#toc a");
+    const sections = tocLinks
+      .map(a => document.getElementById(a.getAttribute("href").slice(1)))
+      .filter(Boolean);
+
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if(!visible) return;
+      const id = visible.target.id;
+      tocLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#"+id));
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: [0.12, 0.2, 0.35, 0.5] });
+
+    sections.forEach(s => io.observe(s));
+
+    // Search filter in TOC
+    const search = $("#search");
+    function applyFilter(q){
+      const query = q.trim().toLowerCase();
+      tocLinks.forEach(a => {
+        const text = (a.innerText + " " + (a.getAttribute("data-keywords")||"")).toLowerCase();
+        const show = !query || text.includes(query);
+        a.style.display = show ? "" : "none";
+      });
+    }
+    search.addEventListener("input", (e) => applyFilter(e.target.value));
+
+    // Ctrl/⌘ + K to focus search
+    window.addEventListener("keydown", (e) => {
+      const isK = (e.key || "").toLowerCase() === "k";
+      if(isK && (e.ctrlKey || e.metaKey)){
+        e.preventDefault();
+        search.focus();
+      }
+    });
+
+    
+    // Practice editor
+    const starter = `<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мій міні-лендінг</title>
+  <style>
+    body{font-family: system-ui, sans-serif; margin: 24px; line-height: 1.5}
+    .card{max-width: 720px; margin: 0 auto; padding: 18px; border: 1px solid #ddd; border-radius: 14px}
+    img{max-width: 100%; border-radius: 12px}
+    a{color: #4f46e5}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Моє хобі: фотографія</h1>
+    <p>HTML допомагає красиво структурувати текст, картинки і посилання.</p>
+
+    <h2>Що мені подобається</h2>
+    <ul>
+      <li>Знімати природу</li>
+      <li>Пробувати нові ракурси</li>
+      <li>Редагувати фото</li>
+    </ul>
+
+    <p>Натхнення: <a href="https://developer.mozilla.org/" target="_blank" rel="noopener noreferrer">MDN</a></p>
+
+    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=60"
+         alt="Фотоапарат крупним планом">
+  </div>
+</body>
+</html>`;
+
+    const editor = $("#editor");
+    const frame = $("#frame");
+
+    function runPreview(){
+      const html = editor.value;
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write(html);
+      doc.close();
+    }
+
+    $("#runBtn").addEventListener("click", runPreview);
+    $("#resetBtn").addEventListener("click", () => { editor.value = starter; runPreview(); });
+
+    // Init
+    editor.value = starter;
+    runPreview();
+  </script>
+</body>
+</html>
