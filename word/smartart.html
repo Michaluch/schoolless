@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Практична робота: SmartArt у MS Word</title>
+    <style>
+        :root {
+            --bone: #f9f6ee;
+            --dark-bone: #e2dfd2;
+            --accent: #4a4945;
+            --text: #333333;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bone);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid var(--dark-bone);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--bone);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-around;
+            background: var(--bone);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        h2 {
+            color: var(--accent);
+            border-left: 5px solid var(--dark-bone);
+            padding-left: 15px;
+            margin-top: 40px;
+        }
+
+        .task-card {
+            background: var(--bone);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .task-card:hover {
+            border-color: var(--dark-bone);
+            background: var(--white);
+            transform: scale(1.01);
+        }
+
+        .task-card h3 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background: var(--white);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--dark-bone);
+            text-align: center;
+        }
+
+        th {
+            background: var(--dark-bone);
+            color: var(--accent);
+        }
+
+        .bonus-section {
+            background: #fdfcf0;
+            border: 2px dashed var(--dark-bone);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: var(--bone);
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        ul { padding-left: 20px; }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .wrapper { padding: 20px; }
+            .meta-info { flex-direction: column; gap: 10px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <header>
+        <span class="badge">Практична робота</span>
+        <h1>SmartArt у Microsoft Word</h1>
+        <p>Візуалізація даних та створення структурних схем</p>
+    </header>
+
+    <div class="meta-info">
+        <span>🎯 Мета: Навчитись будувати схеми</span>
+        <span>⏱ Час: 20–35 хв</span>
+        <span>💻 ПЗ: MS Word</span>
+    </div>
+
+    <section>
+        <h2>Теоретична база</h2>
+        <p><strong>SmartArt</strong> — це графічний об'єкт, який дозволяє перетворити звичайний текст на професійну діаграму. Основні типи включають: <em>Списки, Процеси, Цикли, Ієрархії та Піраміди.</em></p>
+    </section>
+
+    <section>
+        <h2>Хід роботи</h2>
+        
+        <div class="task-card">
+            <h3>Завдання 1. Підготовка</h3>
+            <p>Відкрийте Word, перейдіть на вкладку <strong>Вставлення</strong> та знайдіть розділ <strong>SmartArt</strong>. Ознайомтеся з галереєю шаблонів.</p>
+        </div>
+
+        <div class="task-card">
+            <h3>Завдання 2. Побудова схеми</h3>
+            <p>Оберіть одну з тем: "Будова комп’ютера", "Мій день" або "Структура школи". Створіть схему, що містить мінімум 5 змістовних блоків.</p>
+        </div>
+
+        <div class="task-card">
+            <h3>Завдання 3. Стилізація</h3>
+            <p>Змініть кольорову схему SmartArt та додайте заголовок документа. Не забудьте додати короткий текстовий опис (3-5 речень) під схемою.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Оцінювання</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Критерій</th>
+                    <th>Опис</th>
+                    <th>Бали</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Логіка</td>
+                    <td>Відповідність типу схеми обраній темі</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>Наповнення</td>
+                    <td>5+ елементів та підписи</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>Оформлення</td>
+                    <td>Дизайн, заголовок, опис</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Креатив</td>
+                    <td>Власні кольори та додаткові елементи</td>
+                    <td>1</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="bonus-section">
+        <h3>🌟 Додаткові бали</h3>
+        <p>Створіть другу схему іншого типу (наприклад, "Цикл" для розпорядку дня) та налаштуйте власні градієнти для блоків.</p>
+    </div>
+
+    <footer>
+        &copy; 2026 Mike Omelchuk 
+    </footer>
+</div>
+
+</body>
+</html>
