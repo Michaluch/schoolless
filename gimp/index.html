@@ -3,210 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Практична робота: Колажі в GIMP</title>
+    <title>Мастер-клас GIMP: Мистецтво Колажу</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #4a90e2;
-            --secondary: #2c3e50;
-            --accent: #e74c3c;
-            --light: #f4f7f6;
+            --ivory-bg: #FFFFF0; /* Класична слонова кістка */
+            --ivory-dark: #F2F2E1;
+            --accent-gold: #B8860B; /* Темне золото для акцентів */
+            --text-main: #3E3B35;
+            --card-white: #FFFFFF;
+            --border-color: #E6E6D0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Georgia', serif; /* Більш "художній" шрифт */
             line-height: 1.6;
             margin: 0;
-            background-color: var(--light);
-            color: var(--secondary);
+            background-color: var(--ivory-bg);
+            color: var(--text-main);
         }
 
         header {
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            color: white;
-            padding: 3rem 1rem;
+            background-color: var(--ivory-dark);
+            border-bottom: 3px solid var(--accent-gold);
+            color: var(--text-main);
+            padding: 4rem 1rem;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
         .intro {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            border-left: 5px solid var(--primary);
+            background: var(--card-white);
+            padding: 2.5rem;
+            border-radius: 4px;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.1);
+            border: 1px solid var(--border-color);
         }
 
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
 
         .tool-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
+            background: var(--card-white);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
             text-align: center;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
 
-        .tool-card:hover { transform: translateY(-5px); }
-        .tool-card i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+        .tool-card:hover {
+            border-color: var(--accent-gold);
+            background-color: var(--ivory-bg);
+        }
+
+        .tool-card i {
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
 
         .variant-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
         }
 
         .variant {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .variant-header {
-            background: var(--primary);
-            color: white;
-            padding: 1.5rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .variant-body {
-            padding: 1.5rem;
-            flex-grow: 1;
-        }
-
-        .variant-body ul {
-            padding-left: 1.2rem;
-        }
-
-        .footer {
-            text-align: center;
+            background: var(--card-white);
+            border: 1px solid var(--border-color);
             padding: 2rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .variant::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--accent-gold);
+        }
+
+        .variant h3 {
+            color: var(--accent-gold);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .badge-list {
+            margin-top: 1rem;
         }
 
         .badge {
             display: inline-block;
-            background: #eee;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin: 2px;
+            background: var(--ivory-dark);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin: 3px;
+            color: #5d5a52;
+        }
+
+        .criteria {
+            background-color: var(--ivory-dark);
+            padding: 2rem;
+            margin-top: 4rem;
+            border-radius: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 4rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 4rem 0;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Практична робота №5</h1>
-    <p>Створення складних багатошарових зображень та колажів у GIMP</p>
+    <h1>Практична робота: Колажі</h1>
+    <p>Використання складних інструментів ретушу та роботи з шарами в GIMP</p>
 </header>
 
 <div class="container">
     <section class="intro">
-        <h2><i class="fas fa-info-circle"></i> Мета роботи</h2>
-        <p>Навчитися комбінувати декілька зображень, працювати з прозорістю шарів, ретушувати недоліки за допомогою "Штампу" та створювати гармонійні текстові композиції.</p>
+        <h2><i class="fas fa-paint-brush"></i> Творче завдання</h2>
+        <p>Сьогодні ви станете цифровими художниками. Ваше завдання — створити складну композицію (колаж), використовуючи декілька джерел зображень та професійні інструменти корекції.</p>
+        <div class="badge-list">
+            <span class="badge">Шари</span>
+            <span class="badge">Маски</span>
+            <span class="badge">Ретуш</span>
+            <span class="badge">Текст</span>
+        </div>
     </section>
 
-    <h3>Обов'язкові інструменти:</h3>
     <div class="tools-grid">
         <div class="tool-card">
-            <i class="fas fa-clone"></i>
-            <h4>Штамп (Clone)</h4>
-            <p>Для копіювання текстур</p>
+            <i class="fas fa-stamp"></i>
+            <h4>Штамп</h4>
+            <p>Утримуйте <b>Ctrl</b>, щоб обрати джерело копіювання текстури.</p>
         </div>
         <div class="tool-card">
-            <i class="fas fa-band-aid"></i>
+            <i class="fas fa-magic"></i>
             <h4>Лікувальна кисть</h4>
-            <p>Для видалення дефектів</p>
+            <p>Ідеально підходить для непомітного видалення зайвих об'єктів.</p>
         </div>
         <div class="tool-card">
             <i class="fas fa-layer-group"></i>
-            <h4>Режими накладання</h4>
-            <p>Прозорість та шари</p>
-        </div>
-        <div class="tool-card">
-            <i class="fas fa-font"></i>
-            <h4>Текст</h4>
-            <p>Робота з написами</p>
+            <h4>Властивості шарів</h4>
+            <p>Експериментуйте з непрозорістю (Opacity) та режимами накладання.</p>
         </div>
     </div>
 
-    <hr>
-
-    <h2 style="text-align:center; margin: 2rem 0;">Оберіть один варіант завдання:</h2>
+    <h2 style="text-align:center; color: var(--accent-gold);">Оберіть напрямок роботи</h2>
 
     <div class="variant-container">
         <div class="variant">
-            <div class="variant-header">Варіант 1: Digital-Валентинка</div>
-            <div class="variant-body">
-                <p>Створіть вітальну листівку у стилі колажу.</p>
-                <ul>
-                    <li>Використайте мінімум 4 різних шари (фон, серця, квіти, персонажі).</li>
-                    <li>Обробіть краї об'єктів (розмивання або розтушовування).</li>
-                    <li>Додайте текст з ефектом тіні.</li>
-                    <li><b>Фішка:</b> Використайте <i>Штамп</i>, щоб розмножити дрібні елементи декору.</li>
-                </ul>
-            </div>
+            <h3>1. Листівка-валентинка</h3>
+            <p>Створіть багатошарову вітальну листівку.</p>
+            <ul>
+                <li>Використайте інструмент <b>Текст</b> для написання вірша або привітання.</li>
+                <li>За допомогою <b>Штампу</b> створіть візерунок з пелюсток або сердець.</li>
+                <li>Додайте ефект "м'якого фокусу" для фонового шару.</li>
+            </ul>
         </div>
 
         <div class="variant">
-            <div class="variant-header" style="background: #27ae60;">Варіант 2: Путівник містом</div>
-            <div class="variant-body">
-                <p>Створіть туристичну картку вашого рідного населеного пункту.</p>
-                <ul>
-                    <li>Знайдіть фото 3-4 визначних місць.</li>
-                    <li>За допомогою <i>Лікувальної кисті</i> приберіть з фото зайві деталі (сміття, дроти).</li>
-                    <li>Зробіть плавні переходи між фото через маски шарів або градієнт.</li>
-                    <li>Додайте назву міста великим стилізованим шрифтом.</li>
-                </ul>
-            </div>
+            <h3>2. Мій рідний край</h3>
+            <p>Колаж-путівник вашим містом чи селом.</p>
+            <ul>
+                <li>Зберіть 3-5 фотографій архітектури чи природи.</li>
+                <li>Використайте <b>Лікувальну кисть</b>, щоб прибрати випадкових перехожих або сміття на фото.</li>
+                <li>Зробіть написи з назвами місць, використовуючи різні шрифти.</li>
+            </ul>
         </div>
 
         <div class="variant">
-            <div class="variant-header" style="background: #f39c12;">Варіант 3: Скарби рідного краю</div>
-            <div class="variant-body">
-                <p>Створіть постер про цікаві природні або історичні місця області.</p>
-                <ul>
-                    <li>Використайте карту області як напівпрозорий фоновий шар.</li>
-                    <li>Виріжте об'єкти (замки, озера) та розмістіть їх поверх фону.</li>
-                    <li>Застосуйте інструмент <i>Текст</i> для підпису кожного місця.</li>
-                    <li><b>Завдання:</b> Підкоригуйте колір всіх фото, щоб вони виглядали в одному стилі.</li>
-                </ul>
-            </div>
+            <h3>3. Історична спадщина</h3>
+            <p>Композиція про цікаві місця рідного краю.</p>
+            <ul>
+                <li>Поєднайте сучасні фото з елементами "старовини" (можна накласти текстуру старого паперу).</li>
+                <li>Створіть складний фон, використовуючи градієнти та прозорість шарів.</li>
+                <li>Додайте декоративні елементи, клоновані з інших фотографій.</li>
+            </ul>
         </div>
     </div>
 
-    <section class="intro" style="margin-top: 3rem; border-left-color: var(--accent);">
-        <h3><i class="fas fa-check-double"></i> Критерії оцінювання:</h3>
-        <ul>
-            <li>Використано не менше 5 шарів — <b>4 бали</b></li>
-            <li>Якісне вирізання об'єктів та робота зі "Штампом" — <b>3 бали</b></li>
-            <li>Робота з текстом (шрифт, колір, розміщення) — <b>2 бали</b></li>
-            <li>Загальна композиція та творчий підхід — <b>3 бали</b></li>
-        </ul>
-        <p><strong>Результат:</strong> Збережіть роботу у форматі <code>.xcf</code> (для редагування) та експортуйте у <code>.jpg</code> для перевірки.</p>
+    <section class="criteria">
+        <h3><i class="fas fa-tasks"></i> Що має бути в роботі:</h3>
+        <ol>
+            <li>Мінімум 4 шари з різним вмістом.</li>
+            <li>Відсутність зайвих деталей на фото (результат роботи Штампом/Лікувальною кистю).</li>
+            <li>Читабельний та стилізований текст.</li>
+            <li>Збережений файл проекту <b>.xcf</b> та експортований <b>.png</b>.</li>
+        </ol>
     </section>
-</div>
 
-<div class="footer">
-    <p>© 2026 Кабінет інформатики. Створено для майбутніх дизайнерів.</p>
+    <div class="footer">
+        <p>Успіхів у творчості! Пам'ятайте: GIMP — це чисте полотно, а ви — автори.</p>
+    </div>
 </div>
 
 </body>
