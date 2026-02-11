@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Практична робота: 10 золотих запитів</title>
+    <style>
+        :root { --primary: #2563eb; --bg: #f1f5f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 40px 20px; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); text-align: center; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        .query-card { background: #f8fafc; border-left: 4px solid var(--primary); padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .query-num { font-weight: bold; color: var(--primary); margin-right: 10px; }
+        .hint { font-size: 0.85rem; color: #64748b; font-style: italic; }
+        .criteria { background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Завдання: Майстер Запитів</h1>
+    <p>Використовуючи створену базу "Мистецька Галерея", реалізуйте наступні запити в режимі Конструктора:</p>
+
+    <div class="query-card">
+        <span class="query-num">1.</span> <b>Українські митці:</b> Вивести імена всіх художників з України. <br>
+        <span class="hint">Умова відбору в полі Country: <span class="criteria">"Україна"</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">2.</span> <b>Дорогі шедеври:</b> Вивести назви картин, ціна яких більша за 500,000. <br>
+        <span class="hint">Умова в полі Price: <span class="criteria">>500000</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">3.</span> <b>Жанр "Марина":</b> Знайти всі картини Айвазовського (жанр "Марина"). <br>
+        <span class="hint">Умова в полі Genre: <span class="criteria">"Марина"</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">4.</span> <b>Художники XIX століття:</b> Вивести тих, хто народився до 1900 року. <br>
+        <span class="hint">Умова в полі BirthYear: <span class="criteria"><1900</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">5.</span> <b>Сортування за ціною:</b> Вивести всі картини від найдешевшої до найдорожчої. <br>
+        <span class="hint">Використовуйте рядок "Сортування": <span class="criteria">За зростанням</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">6.</span> <b>Пошук за назвою:</b> Вивести картини, назва яких починається на букву "З". <br>
+        <span class="hint">Умова в полі Title: <span class="criteria">Like "З*"</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">7.</span> <b>Бюджетні варіанти:</b> Картини ціною від 100,000 до 400,000. <br>
+        <span class="hint">Умова: <span class="criteria">Between 100000 And 400000</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">8.</span> <b>Не французи:</b> Вивести художників з усіх країн, крім Франції. <br>
+        <span class="hint">Умова: <span class="criteria"><> "Франція"</span></span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">9.</span> <b>Авторство:</b> Вивести назву картини та Прізвище її автора (потрібні дві таблиці). <br>
+        <span class="hint">Додайте в запит таблиці Artists та Paintings одночасно.</span>
+    </div>
+
+    <div class="query-card">
+        <span class="query-num">10.</span> <b>Сучасники:</b> Художники, що народилися у 1840 або 1853 роках. <br>
+        <span class="hint">Використовуйте рядок "або" (OR): <span class="criteria">1840</span> (ряд 1), <span class="criteria">1853</span> (ряд 2).</span>
+    </div>
+
+    <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px;">
+        <h3>Оцінювання:</h3>
+        <p>Кожен вірно виконаний запит — 1 бал. +1 бонусний бал за охайність та правильні типи даних у таблицях. <b>Максимум: 11 балів.</b></p>
+    </div>
+</div>
+
+</body>
+</html>
