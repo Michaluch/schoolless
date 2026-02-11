@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Практична робота: Колажі в GIMP</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--light);
+            color: var(--secondary);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--primary);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .tool-card:hover { transform: translateY(-5px); }
+        .tool-card i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+
+        .variant-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .variant {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .variant-header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .variant-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .variant-body ul {
+            padding-left: 1.2rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eee;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Практична робота №5</h1>
+    <p>Створення складних багатошарових зображень та колажів у GIMP</p>
+</header>
+
+<div class="container">
+    <section class="intro">
+        <h2><i class="fas fa-info-circle"></i> Мета роботи</h2>
+        <p>Навчитися комбінувати декілька зображень, працювати з прозорістю шарів, ретушувати недоліки за допомогою "Штампу" та створювати гармонійні текстові композиції.</p>
+    </section>
+
+    <h3>Обов'язкові інструменти:</h3>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <i class="fas fa-clone"></i>
+            <h4>Штамп (Clone)</h4>
+            <p>Для копіювання текстур</p>
+        </div>
+        <div class="tool-card">
+            <i class="fas fa-band-aid"></i>
+            <h4>Лікувальна кисть</h4>
+            <p>Для видалення дефектів</p>
+        </div>
+        <div class="tool-card">
+            <i class="fas fa-layer-group"></i>
+            <h4>Режими накладання</h4>
+            <p>Прозорість та шари</p>
+        </div>
+        <div class="tool-card">
+            <i class="fas fa-font"></i>
+            <h4>Текст</h4>
+            <p>Робота з написами</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2 style="text-align:center; margin: 2rem 0;">Оберіть один варіант завдання:</h2>
+
+    <div class="variant-container">
+        <div class="variant">
+            <div class="variant-header">Варіант 1: Digital-Валентинка</div>
+            <div class="variant-body">
+                <p>Створіть вітальну листівку у стилі колажу.</p>
+                <ul>
+                    <li>Використайте мінімум 4 різних шари (фон, серця, квіти, персонажі).</li>
+                    <li>Обробіть краї об'єктів (розмивання або розтушовування).</li>
+                    <li>Додайте текст з ефектом тіні.</li>
+                    <li><b>Фішка:</b> Використайте <i>Штамп</i>, щоб розмножити дрібні елементи декору.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="variant">
+            <div class="variant-header" style="background: #27ae60;">Варіант 2: Путівник містом</div>
+            <div class="variant-body">
+                <p>Створіть туристичну картку вашого рідного населеного пункту.</p>
+                <ul>
+                    <li>Знайдіть фото 3-4 визначних місць.</li>
+                    <li>За допомогою <i>Лікувальної кисті</i> приберіть з фото зайві деталі (сміття, дроти).</li>
+                    <li>Зробіть плавні переходи між фото через маски шарів або градієнт.</li>
+                    <li>Додайте назву міста великим стилізованим шрифтом.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="variant">
+            <div class="variant-header" style="background: #f39c12;">Варіант 3: Скарби рідного краю</div>
+            <div class="variant-body">
+                <p>Створіть постер про цікаві природні або історичні місця області.</p>
+                <ul>
+                    <li>Використайте карту області як напівпрозорий фоновий шар.</li>
+                    <li>Виріжте об'єкти (замки, озера) та розмістіть їх поверх фону.</li>
+                    <li>Застосуйте інструмент <i>Текст</i> для підпису кожного місця.</li>
+                    <li><b>Завдання:</b> Підкоригуйте колір всіх фото, щоб вони виглядали в одному стилі.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <section class="intro" style="margin-top: 3rem; border-left-color: var(--accent);">
+        <h3><i class="fas fa-check-double"></i> Критерії оцінювання:</h3>
+        <ul>
+            <li>Використано не менше 5 шарів — <b>4 бали</b></li>
+            <li>Якісне вирізання об'єктів та робота зі "Штампом" — <b>3 бали</b></li>
+            <li>Робота з текстом (шрифт, колір, розміщення) — <b>2 бали</b></li>
+            <li>Загальна композиція та творчий підхід — <b>3 бали</b></li>
+        </ul>
+        <p><strong>Результат:</strong> Збережіть роботу у форматі <code>.xcf</code> (для редагування) та експортуйте у <code>.jpg</code> для перевірки.</p>
+    </section>
+</div>
+
+<div class="footer">
+    <p>© 2026 Кабінет інформатики. Створено для майбутніх дизайнерів.</p>
+</div>
+
+</body>
+</html>
