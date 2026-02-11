@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Урок: Створення та наповнення БД</title>
+    <style>
+        :root { --primary: #1e293b; --accent: #3b82f6; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #334155; background: var(--bg); padding: 20px; }
+        .card { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        h2 { color: var(--accent); margin-top: 25px; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        th { background: #f1f5f9; }
+        .schema-box { background: #1e293b; color: #f8fafc; padding: 20px; border-radius: 8px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Крок 1: Проектування та наповнення БД "Мистецька Галерея"</h1>
+        
+        <section>
+            <h2>1. Структура таблиць</h2>
+            <p>Учні мають створити дві таблиці зі спеціальними типами даних:</p>
+            <div class="schema-box">
+                <b>Таблиця 1: Artists (Художники)</b><br>
+                - ArtistID (Автоінкремент, Ключ)<br>
+                - FullName (Текст)<br>
+                - Country (Текст)<br>
+                - BirthYear (Число)<br><br>
+                <b>Таблиця 2: Paintings (Картини)</b><br>
+                - PaintID (Автоінкремент, Ключ)<br>
+                - Title (Текст)<br>
+                - ArtistID (Число, Зовнішній ключ)<br>
+                - Price (Грошовий)<br>
+                - Genre (Текст)
+            </div>
+        </section>
+
+        
+
+        <section>
+            <h2>2. Дані для заповнення</h2>
+            
+            <h3>Таблиця: Artists</h3>
+            <table>
+                <tr><th>ID</th><th>FullName</th><th>Country</th><th>BirthYear</th></tr>
+                <tr><td>1</td><td>Іван Айвазовський</td><td>Україна</td><td>1817</td></tr>
+                <tr><td>2</td><td>Казимир Малевич</td><td>Україна</td><td>1879</td></tr>
+                <li>3</td><td>Клод Моне</td><td>Франція</td><td>1840</td></tr>
+                <tr><td>4</td><td>Вінсент ван Гог</td><td>Нідерланди</td><td>1853</td></tr>
+                <tr><td>5</td><td>Марія Примаченко</td><td>Україна</td><td>1909</td></tr>
+            </table>
+
+            <h3>Таблиця: Paintings</h3>
+            <table>
+                <tr><th>ID</th><th>Title</th><th>ArtistID</th><th>Price</th><th>Genre</th></tr>
+                <tr><td>1</td><td>Дев'ятий вал</td><td>1</td><td>500000</td><td>Марина</td></tr>
+                <tr><td>2</td><td>Чорний квадрат</td><td>2</td><td>1000000</td><td>Абстракціонізм</td></tr>
+                <tr><td>3</td><td>Водяні лілії</td><td>3</td><td>750000</td><td>Імпресіонізм</td></tr>
+                <tr><td>4</td><td>Зоряна ніч</td><td>4</td><td>900000</td><td>Постімпресіонізм</td></tr>
+                <tr><td>5</td><td>Синій бик</td><td>5</td><td>120000</td><td>Наївне мистецтво</td></tr>
+                <tr><td>6</td><td>Соняшники</td><td>4</td><td>850000</td><td>Натюрморт</td></tr>
+                <tr><td>7</td><td>Червоний захід сонця</td><td>1</td><td>300000</td><td>Марина</td></tr>
+            </table>
+        </section>
+    </div>
+</body>
+</html>
