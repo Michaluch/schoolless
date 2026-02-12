@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Практична робота (8–9 клас): Математичні та економічні задачі у табличному процесорі</title>
+  <style>
+    :root{
+      /* Pistachio theme */
+      --pistachio-50:#F3F8F1;
+      --pistachio-100:#E7F1E3;
+      --pistachio-200:#D1E6C8;
+      --pistachio-300:#B8D7A7;
+      --pistachio-400:#97C77C;
+      --pistachio-500:#78B95B;
+      --pistachio-600:#5EA043;
+      --pistachio-700:#4A7E34;
+      --pistachio-800:#365B26;
+      --pistachio-900:#223A17;
+
+      --ink:#0f172a;
+      --muted:#475569;
+      --border:rgba(34,58,23,.18);
+      --card:#ffffff;
+      --shadow:0 10px 30px rgba(15, 23, 42, .08);
+      --radius:16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, var(--pistachio-100) 0%, transparent 60%),
+        radial-gradient(1000px 600px at 90% 10%, var(--pistachio-200) 0%, transparent 55%),
+        linear-gradient(180deg, var(--pistachio-50), #fff 65%);
+    }
+
+    a{ color:var(--pistachio-800); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      gap: 22px;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header{
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--pistachio-600), var(--pistachio-400));
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 18px 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    header:before{
+      content:"";
+      position:absolute;
+      inset:-60px -120px auto auto;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%);
+      transform: rotate(10deg);
+    }
+    header h1{
+      margin:0 0 6px 0;
+      font-size: 18px;
+      letter-spacing:.2px;
+      position: relative;
+      z-index: 1;
+    }
+    header p{
+      margin:0;
+      opacity:.92;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+      max-width: 90ch;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .pill{
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+    }
+
+    nav{
+      position: sticky;
+      top: 16px;
+      align-self: start;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, .06);
+    }
+    nav .title{
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--pistachio-900);
+      letter-spacing: .2px;
+      margin-bottom: 10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    nav .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--pistachio-500);
+      box-shadow: 0 0 0 4px rgba(120,185,91,.18);
+    }
+    nav ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    nav a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      color: var(--ink);
+      font-size: 14px;
+    }
+    nav a:hover{
+      background: var(--pistachio-100);
+      border-color: rgba(120,185,91,.25);
+      text-decoration:none;
+    }
+    nav a small{
+      color: var(--muted);
+      display:block;
+      font-size: 12px;
+      margin-top:2px;
+    }
+
+    main{
+      display:flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    h2{
+      margin:0 0 10px 0;
+      font-size: 18px;
+      color: var(--pistachio-900);
+      letter-spacing: .2px;
+    }
+    h3{
+      margin: 14px 0 8px 0;
+      font-size: 15px;
+      color: var(--pistachio-800);
+    }
+    p, li{
+      color: var(--ink);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .note{
+      border-left: 4px solid var(--pistachio-600);
+      background: var(--pistachio-50);
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--pistachio-900);
+      font-size: 13px;
+      margin: 10px 0;
+    }
+
+    .step{
+      border: 1px dashed rgba(74,126,52,.35);
+      background: linear-gradient(180deg, var(--pistachio-50), #fff);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+    .step strong{ color: var(--pistachio-900); }
+
+    .example{
+      margin-top: 8px;
+      background: rgba(15, 23, 42, .04);
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 12px;
+      padding: 10px;
+      overflow:auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      color: #0b1220;
+      white-space: pre;
+    }
+
+    table{
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      margin-top: 8px;
+    }
+    th, td{
+      padding: 10px 10px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(34,58,23,.12);
+      border-right: 1px solid rgba(34,58,23,.08);
+      text-align: left;
+      vertical-align: top;
+    }
+    th{
+      background: var(--pistachio-100);
+      color: var(--pistachio-900);
+      font-weight: 700;
+    }
+    tr:last-child td{ border-bottom: 0; }
+    td:last-child, th:last-child{ border-right: 0; }
+
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 920px){
+      .layout{ grid-template-columns: 1fr; }
+      nav{ position: relative; top: 0; }
+      .two-col{ grid-template-columns: 1fr; }
+    }
+
+    .footer{
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 8px 0 0 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <header>
+      <h1>Практична робота (8–9 клас): розв'язування математичних та економічних задач у табличному процесорі</h1>
+      <p>Кожен варіант містить: структуру таблиці, математичні формули (підказка) та список функцій (English / Russian), які треба використати. Мінімум 15–20 рядків даних.</p>
+      <div class="meta">
+        <span class="pill">MS Excel / Google Sheets</span>
+        <span class="pill">Дані: 15–20+ рядків</span>
+        <span class="pill">Формули + копіювання</span>
+        <span class="pill">Функції: не менше 3</span>
+        <span class="pill">Тема: фісташка</span>
+      </div>
+    </header>
+
+    <nav aria-label="Навігація">
+      <div class="title"><span class="dot"></span>Навігація</div>
+      <ul>
+        <li><a href="#instruction">Інструкційна карта<small>покроково з прикладами</small></a></li>
+        <li><a href="#v1">Варіант 1<small>Функція f(x)</small></a></li>
+        <li><a href="#v2">Варіант 2<small>Площа і периметр</small></a></li>
+        <li><a href="#v3">Варіант 3<small>Сімейний бюджет</small></a></li>
+        <li><a href="#v4">Варіант 4<small>Вклад з відсотками</small></a></li>
+        <li><a href="#v5">Варіант 5<small>Амортизація</small></a></li>
+        <li><a href="#grading">Критерії оцінювання<small>11 балів</small></a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="card" id="instruction">
+        <h2>Інструкційна карта (покрокове виконання з прикладами)</h2>
+        <p class="note">Приклади універсальні та не виконують повністю жоден із варіантів 1–5.</p>
+
+        <div class="step">
+          <p><strong>Крок 1.</strong> Створи структуру таблиці за обраним варіантом (заголовки стовпців).</p>
+          <p>Порада: заголовки зроби жирним, за потреби зафіксуй верхній рядок.</p>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 2.</strong> Додай дані: заповни 2–3 рядки вручну, решту — автозаповненням.</p>
+          <p>Приклад нумерації:</p>
+          <div class="example">1
+2
+3
+4
+...</div>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 3.</strong> Створи формулу в першому рядку з розрахунками та скопіюй вниз.</p>
+          <p>Приклад (обчислення значення виразу):</p>
+          <div class="example">=2*POWER(A2;2)-3*A2+1</div>
+          <p>Після копіювання формули змінюються адреси (A3, A4, ...).</p>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 4.</strong> Додай підсумки за допомогою функцій (мінімум 3).</p>
+          <p>Приклад:</p>
+          <div class="example">=MAX(B2:B21)
+=MIN(B2:B21)
+=AVERAGE(B2:B21)</div>
+        </div>
+
+        <div class="step">
+          <p><strong>Крок 5.</strong> Оформи таблицю: межі, вирівнювання, формат чисел (гроші, відсотки, округлення).</p>
+        </div>
+      </section>
+
+      <section class="card" id="v1">
+        <h2>Варіант 1. Обчислення значень функції</h2>
+        <p><strong>Умова.</strong> Для значень <em>x</em> від -5 до 5 (крок 0,5) обчислити:</p>
+        <p><strong>f(x) = 2x² − 3x + 1</strong></p>
+        <p>Знайти максимальне, мінімальне та середнє значення f(x).</p>
+
+        <h3>Структура таблиці</h3>
+        <table>
+          <thead><tr><th>x</th><th>f(x)</th></tr></thead>
+          <tbody><tr><td colspan="2">Заповни 15–20+ рядків значень x (з кроком 0,5 або іншим, щоб вийшло 15–20+ рядків).</td></tr></tbody>
+        </table>
+
+        <div class="two-col">
+          <div>
+            <h3>Математична формула (підказка)</h3>
+            <div class="example">f(x) = 2x² − 3x + 1</div>
+          </div>
+          <div>
+            <h3>Функції, які потрібно використати</h3>
+            <table>
+              <thead><tr><th>English</th><th>Russian</th></tr></thead>
+              <tbody>
+                <tr><td>POWER</td><td>СТЕПЕНЬ</td></tr>
+                <tr><td>MAX</td><td>МАКС</td></tr>
+                <tr><td>MIN</td><td>МИН</td></tr>
+                <tr><td>AVERAGE</td><td>СРЗНАЧ</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="v2">
+        <h2>Варіант 2. Периметр і площа прямокутників</h2>
+        <p><strong>Умова.</strong> Створи таблицю для 20 прямокутників із різними сторонами. Знайди периметр і площу кожного.</p>
+
+        <h3>Структура таблиці</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>№</th><th>Довжина a</th><th>Ширина b</th><th>Периметр P</th><th>Площа S</th>
+            </tr>
+          </thead>
+          <tbody><tr><td colspan="5">Зроби 15–20+ рядків. Нумерацію — автозаповненням.</td></tr></tbody>
+        </table>
+
+        <div class="two-col">
+          <div>
+            <h3>Математичні формули (підказка)</h3>
+            <div class="example">P = 2(a + b)
+S = a · b</div>
+          </div>
+          <div>
+            <h3>Функції, які потрібно використати</h3>
+            <table>
+              <thead><tr><th>English</th><th>Russian</th></tr></thead>
+              <tbody>
+                <tr><td>SUM</td><td>СУММ</td></tr>
+                <tr><td>AVERAGE</td><td>СРЗНАЧ</td></tr>
+                <tr><td>MAX</td><td>МАКС</td></tr>
+                <tr><td>MIN</td><td>МИН</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="v3">
+        <h2>Варіант 3. Сімейний бюджет</h2>
+        <p><strong>Умова.</strong> Є 20 записів витрат за місяць. Потрібно обчислити загальну суму витрат, середні витрати, найбільшу витрату та частку кожної витрати у загальній сумі.</p>
+
+        <h3>Структура таблиці</h3>
+        <table>
+          <thead>
+            <tr><th>№</th><th>Категорія</th><th>Сума</th><th>Частка (%)</th></tr>
+          </thead>
+          <tbody><tr><td colspan="4">Зроби 15–20+ рядків витрат. Категорії можна повторювати.</td></tr></tbody>
+        </table>
+
+        <div class="two-col">
+          <div>
+            <h3>Математичні формули (підказка)</h3>
+            <div class="example">Частка = Сума / Загальна_сума
+Відсоток = Частка · 100%</div>
+          </div>
+          <div>
+            <h3>Функції, які потрібно використати</h3>
+            <table>
+              <thead><tr><th>English</th><th>Russian</th></tr></thead>
+              <tbody>
+                <tr><td>SUM</td><td>СУММ</td></tr>
+                <tr><td>AVERAGE</td><td>СРЗНАЧ</td></tr>
+                <tr><td>MAX</td><td>МАКС</td></tr>
+                <tr><td>COUNT</td><td>СЧЁТ</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="v4">
+        <h2>Варіант 4. Нарахування відсотків за вкладом</h2>
+        <p><strong>Умова.</strong> Початкова сума вкладу — <em>P</em>. Річна ставка — <em>r%</em>. Обчисли суму вкладу за 5 років. Побудуй таблицю «на початок року / на кінець року».</p>
+
+        <h3>Структура таблиці</h3>
+        <table>
+          <thead>
+            <tr><th>Рік</th><th>Сума на початок року</th><th>Сума на кінець року</th></tr>
+          </thead>
+          <tbody><tr><td colspan="3">Зроби 5 рядків (5 років). Для підсумків додай окремий блок з функціями (не менше 3).</td></tr></tbody>
+        </table>
+
+        <div class="two-col">
+          <div>
+            <h3>Математична формула (підказка)</h3>
+            <div class="example">A = P(1 + r)
+(кожного року сума множиться на 1 + r)</div>
+          </div>
+          <div>
+            <h3>Функції, які потрібно використати</h3>
+            <table>
+              <thead><tr><th>English</th><th>Russian</th></tr></thead>
+              <tbody>
+                <tr><td>PRODUCT</td><td>ПРОИЗВЕД</td></tr>
+                <tr><td>POWER</td><td>СТЕПЕНЬ</td></tr>
+                <tr><td>ROUND</td><td>ОКРУГЛ</td></tr>
+                <tr><td>SUM</td><td>СУММ</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="note">Порада: ставку r зручно зберігати в окремій клітинці та використовувати у формулах.</p>
+      </section>
+
+      <section class="card" id="v5">
+        <h2>Варіант 5. Амортизація обладнання (спрощено)</h2>
+        <p><strong>Умова.</strong> Вартість обладнання — <em>C</em>. Термін використання — <em>n</em> років. Обчисли щорічну амортизацію за лінійним методом і залишкову вартість за роками.</p>
+
+        <h3>Структура таблиці</h3>
+        <table>
+          <thead>
+            <tr><th>Рік</th><th>Початкова вартість</th><th>Амортизація</th><th>Залишкова вартість</th></tr>
+          </thead>
+          <tbody><tr><td colspan="4">Зроби 5–10 рядків (за n). Додай підсумковий блок з функціями (не менше 3).</td></tr></tbody>
+        </table>
+
+        <div class="two-col">
+          <div>
+            <h3>Математичні формули (підказка)</h3>
+            <div class="example">A = C / n
+Залишок = C − A·t</div>
+          </div>
+          <div>
+            <h3>Функції, які потрібно використати</h3>
+            <table>
+              <thead><tr><th>English</th><th>Russian</th></tr></thead>
+              <tbody>
+                <tr><td>ROUND</td><td>ОКРУГЛ</td></tr>
+                <tr><td>SUM</td><td>СУММ</td></tr>
+                <tr><td>IF</td><td>ЕСЛИ</td></tr>
+                <tr><td>AVERAGE</td><td>СРЗНАЧ</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="grading">
+        <h2>Критерії оцінювання (11 балів)</h2>
+        <table>
+          <thead><tr><th>Критерій</th><th>Бали</th></tr></thead>
+          <tbody>
+            <tr><td>Коректне створення структури таблиці та заповнення даних (15–20+ рядків там, де це потрібно)</td><td>2</td></tr>
+            <tr><td>Правильність формул і копіювання вниз</td><td>3</td></tr>
+            <tr><td>Використання зазначених функцій (не менше 3) та коректні діапазони</td><td>3</td></tr>
+            <tr><td>Аналіз результатів (підсумкові значення, висновок у 1–2 речення)</td><td>2</td></tr>
+            <tr><td>Оформлення (межі, формат чисел, читабельність)</td><td>1</td></tr>
+            <tr><th>Разом</th><th>11</th></tr>
+          </tbody>
+        </table>
+        <p class="footer">Дизайн: фісташка. Навігація ліворуч веде до всіх розділів.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
